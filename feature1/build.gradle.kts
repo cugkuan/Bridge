@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -15,14 +17,14 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "feature1"
             isStatic = true
         }
     }
@@ -38,7 +40,7 @@ kotlin {
     }
 }
 android {
-    namespace = "top.brightk.bridge"
+    namespace = "top.brightk.feature"
     compileSdk = 35
     defaultConfig {
         minSdk = 24
@@ -48,3 +50,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+dependencies{
+    implementation(projects.shared)
+    add("kspCommonMainMetadata", project(":process"))
+    add("kspAndroid", project(":process"))
+    add("kspIosX64", project(":process"))
+    add("kspIosArm64", project(":process"))
+    add("kspIosSimulatorArm64", project(":process"))
+}
+

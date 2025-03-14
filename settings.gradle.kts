@@ -18,3 +18,5 @@ rootProject.name = "bridge"
 include(":androidApp")
 include(":shared")
 include(":process")
+include(":feature1")
+include(":feature2")
