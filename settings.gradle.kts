@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "bridge"
 include(":androidApp")
 include(":shared")
+include(":process")

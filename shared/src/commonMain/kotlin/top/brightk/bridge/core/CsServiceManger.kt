@@ -3,6 +3,7 @@ package top.brightk.bridge.core
 import LruCache
 import createLruCache
 import top.brightk.bridge.CsService
+import top.brightk.bridge.annotation.Type
 import top.brightk.bridge.common.SafeMap
 import top.brightk.bridge.common.getSafeMap
 

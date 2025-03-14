@@ -1,6 +1,5 @@
 package top.brightk.bridge.annotation
 
-import top.brightk.bridge.core.Type
 
 
 @Target(AnnotationTarget.CLASS)

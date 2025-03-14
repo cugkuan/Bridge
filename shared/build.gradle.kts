@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -30,14 +32,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(kotlin("reflect"))
-            implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.24")
+            implementation(libs.kotlin.reflect)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
 }
-
 android {
     namespace = "top.brightk.bridge"
     compileSdk = 35
@@ -49,3 +50,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+dependencies{
+    add("kspCommonMainMetadata", project(":process"))
+    add("kspAndroid", project(":process"))
+    add("kspIosX64", project(":process"))
+    add("kspIosArm64", project(":process"))
+    add("kspIosSimulatorArm64", project(":process"))
+}
+

@@ -1,4 +1,4 @@
-package top.brightk.bridge.core
+package top.brightk.bridge.annotation
 
 enum class Type(val flag:Char) {
     DEFAULT('a'),
