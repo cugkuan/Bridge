@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib")) // Kotlin 标准库
     implementation(libs.symbol.processing.api) // KSP API
+    implementation(libs.gson)
 }
 
 // 配置 KSP 处理器

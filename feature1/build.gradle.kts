@@ -33,6 +33,7 @@ kotlin {
         commonMain.dependencies {
             implementation(kotlin("reflect"))
             implementation(libs.kotlin.reflect)
+            implementation(projects.shared)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

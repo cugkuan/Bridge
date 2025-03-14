@@ -1,6 +1,6 @@
 package top.brightk.bridge.process
 
-import top.brightk.bridge.process.annotation.Type
+import top.brightk.bridge.annotation.Type
 
 data class CsServiceNode(
     val className: String,

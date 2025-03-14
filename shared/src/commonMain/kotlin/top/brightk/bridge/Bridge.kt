@@ -46,7 +46,8 @@ fun KtUrl.toKey():String{
 }
 fun String.toKtUrl() = getUrl(this)
 object Bridge {
-    fun init(){}
+    fun init(){
+    }
     fun call(request: UriRequest):UriRespond{
         return callService(request)
     }

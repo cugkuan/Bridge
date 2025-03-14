@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+ksp{
+    arg("application","true")
+}
+
 android {
     namespace = "top.brightk.bridge.android"
     compileSdk = 35
@@ -47,6 +51,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.symbol.processing.api)
-    implementation(project(":process"))
+    compileOnly(project(":process"))
     ksp(project(":process"))
 }

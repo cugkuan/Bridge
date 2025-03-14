@@ -8,12 +8,12 @@ import top.brightk.bridge.toKtUrl
 
 object ComponentCsServiceManger {
     private val csServiceConfig: SafeMap<String, CsConfig> = getSafeMap()
-    fun register(url: String, config: CsConfig) {
-        csServiceConfig.put(url.toKtUrl().toKey(), config)
+    fun registerByUrl(url: String, config: CsConfig) {
+       register(url.toKtUrl().toKey(), config)
     }
 
-    fun unRegister(url: String) {
-        csServiceConfig.remove(url.toKtUrl().toKey())
+    fun register(key: String,config: CsConfig){
+        csServiceConfig.put(key, config)
     }
 
     fun getCsConfig(url: String): CsConfig? {
