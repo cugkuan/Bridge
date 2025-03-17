@@ -8,7 +8,6 @@ plugins {
 ksp{
     arg("application","true")
 }
-
 android {
     namespace = "top.brightk.bridge.android"
     compileSdk = 35
@@ -41,6 +40,14 @@ android {
     }
 }
 
+//// 配置编译器插件
+//
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+//    kotlinOptions.freeCompilerArgs += listOf(
+//        "-Xplugin=${project(":kcpPlugin").buildDir}/libs/kcpPlugin.jar" // 应用编译器插件
+//    )
+//}
+
 dependencies {
     implementation(projects.shared)
     implementation(projects.feature1)
@@ -51,6 +58,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.symbol.processing.api)
+
     compileOnly(project(":process"))
     ksp(project(":process"))
+    //compileOnly(project(":kcpPlugin"))
+    add("kotlinCompilerPluginClasspath", project(":kcpPlugin"))
 }

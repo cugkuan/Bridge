@@ -6,15 +6,18 @@ compose = "1.5.4"
 compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.0"
 jetbrainsKotlinJvm = "2.1.0"
+kotlinCompilerEmbeddable = "2.1.0"
 kotlinReflect = "2.0.21"
 kotlinStdlib = "2.1.10"
 runner = "1.5.2"
 core = "1.5.0"
 junit = "1.1.5"
 symbolProcessingApi = "2.1.0-1.0.29"
+kcp = "1.9.0"
 
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+kotlin-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlinCompilerEmbeddable" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflect" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -40,3 +43,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "symbolProcessingApi" }
+kcp = {id = "org.jetbrains.kotlin.plugin.compiler",version.ref = "kcp"}
