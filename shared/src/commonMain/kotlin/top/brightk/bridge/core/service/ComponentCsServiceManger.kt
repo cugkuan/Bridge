@@ -1,4 +1,4 @@
-package top.brightk.bridge.core
+package top.brightk.bridge.core.service
 
 import top.brightk.bridge.KtUrl
 import top.brightk.bridge.common.SafeMap
@@ -7,24 +7,24 @@ import top.brightk.bridge.toKey
 import top.brightk.bridge.toKtUrl
 
 object ComponentCsServiceManger {
-    private val csServiceConfig: SafeMap<String, CsConfig> = getSafeMap()
-    fun registerByUrl(url: String, config: CsConfig) {
+    private val csServiceConfig: SafeMap<String, CsServiceConfig> = getSafeMap()
+    fun registerByUrl(url: String, config: CsServiceConfig) {
        register(url.toKtUrl().toKey(), config)
     }
 
-    fun register(key: String,config: CsConfig){
+    fun register(key: String,config: CsServiceConfig){
         csServiceConfig.put(key, config)
     }
 
-    fun getCsConfig(url: String): CsConfig? {
+    fun getCsConfig(url: String): CsServiceConfig? {
         return getCsConfigByKey(url.toKtUrl().toKey())
     }
 
-    fun getCsConfig(ktUrl: KtUrl): CsConfig? {
+    fun getCsConfig(ktUrl: KtUrl): CsServiceConfig? {
         return getCsConfigByKey(ktUrl.toKey())
     }
 
-    fun getCsConfigByKey(key: String): CsConfig? {
+    fun getCsConfigByKey(key: String): CsServiceConfig? {
         return csServiceConfig.get(key)
     }
 

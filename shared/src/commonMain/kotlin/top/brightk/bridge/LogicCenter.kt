@@ -1,6 +1,6 @@
 package top.brightk.bridge
 
-import top.brightk.bridge.core.CsServiceManger
+import top.brightk.bridge.core.service.CsServiceManger
 import top.brightk.bridge.core.FIALURE
 import top.brightk.bridge.core.NOTFIND
 import top.brightk.bridge.core.UriRequest

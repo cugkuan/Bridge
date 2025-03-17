@@ -1,4 +1,4 @@
-package top.brightk.bridge.core
+package top.brightk.bridge.core.service
 
 import LruCache
 import createLruCache
