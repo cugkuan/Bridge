@@ -7,3 +7,9 @@ data class CsServiceNode(
     val key: String,
     val type: Type
 )
+
+data class FcNode(
+    val functionName:String,
+    val key: String,
+    val hasParams:Boolean
+)

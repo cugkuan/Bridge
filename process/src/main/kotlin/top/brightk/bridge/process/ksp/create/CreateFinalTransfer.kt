@@ -5,11 +5,13 @@ import com.google.devtools.ksp.processing.Dependencies
 import top.brightk.bridge.process.CS_TRANSFER_FINIAL
 import top.brightk.bridge.process.CS_TRANSFER_FINIAL_CLASS
 import top.brightk.bridge.process.CsServiceNode
+import top.brightk.bridge.process.FcNode
 
 
 class CreateFinalTransfer(
     private val codeGenerator: CodeGenerator,
     private val csService: List<CsServiceNode>,
+    private val fcList:List<FcNode>
 ) : BaseTransfer() {
 
     fun create() {
@@ -29,6 +31,10 @@ class CreateFinalTransfer(
                     appendText("import top.brightk.bridge.annotation.Type.NEW")
                     newLine(1)
                     appendText("import top.brightk.bridge.annotation.Type.SINGLE")
+                    newLine(1)
+                    appendText("import top.brightk.bridge.registerFunction")
+                    newLine(1)
+                    appendText("import androidx.compose.runtime.Composable")
                     newLine(2)
                     appendText("class $CS_TRANSFER_FINIAL_CLASS {")
                     newLine(1)
@@ -44,6 +50,19 @@ class CreateFinalTransfer(
                             newLine(1)
                         }
                         newLine(1)
+                    }
+                    if (fcList.isNotEmpty()) {
+                        fcList.forEach{ fc ->
+                            if (fc.hasParams) {
+                                appendTextWithTab(
+                                    "registerFunction(\"${fc.key}\", @Composable{ ${fc.functionName}(it)})",2
+                                )
+                            }else{
+                                appendTextWithTab(
+                                    "registerFunction(\"${fc.key}\", @Composable { ${fc.functionName}()})",2
+                                )
+                            }
+                        }
                     }
                     newLine(1)
                     appendTextWithTab("}")

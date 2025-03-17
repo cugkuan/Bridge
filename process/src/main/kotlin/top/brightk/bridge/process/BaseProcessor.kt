@@ -27,7 +27,12 @@ abstract class BaseProcessor(private val env: SymbolProcessorEnvironment) : Symb
         }
         appendText(text)
     }
-
+    fun error(text: String){
+        logger.error("Bridge:-->$text")
+    }
+    fun log(tag:String,msg:String){
+        logger.warn("$tag ==> $msg")
+    }
     fun log(text: String) {
         logger.warn("CsKsp --> $text")
     }

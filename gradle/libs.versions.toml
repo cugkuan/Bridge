@@ -14,6 +14,7 @@ core = "1.5.0"
 junit = "1.1.5"
 symbolProcessingApi = "2.1.0-1.0.29"
 kcp = "1.9.0"
+compose-multiplatform = "1.7.0"
 
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -44,3 +45,4 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "symbolProcessingApi" }
 kcp = {id = "org.jetbrains.kotlin.plugin.compiler",version.ref = "kcp"}
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
