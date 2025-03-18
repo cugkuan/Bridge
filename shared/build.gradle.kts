@@ -34,6 +34,7 @@ kotlin {
             implementation(kotlin("reflect"))
             implementation(libs.kotlin.reflect)
             implementation(compose.runtime)
+            implementation(compose.foundation)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

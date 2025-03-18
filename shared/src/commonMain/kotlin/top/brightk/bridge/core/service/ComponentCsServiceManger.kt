@@ -2,12 +2,11 @@ package top.brightk.bridge.core.service
 
 import top.brightk.bridge.KtUrl
 import top.brightk.bridge.common.SafeMap
-import top.brightk.bridge.common.getSafeMap
 import top.brightk.bridge.toKey
 import top.brightk.bridge.toKtUrl
 
 object ComponentCsServiceManger {
-    private val csServiceConfig: SafeMap<String, CsServiceConfig> = getSafeMap()
+    private val csServiceConfig: SafeMap<String, CsServiceConfig> = SafeMap()
     fun registerByUrl(url: String, config: CsServiceConfig) {
        register(url.toKtUrl().toKey(), config)
     }

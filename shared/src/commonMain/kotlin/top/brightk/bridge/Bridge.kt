@@ -1,5 +1,7 @@
 package top.brightk.bridge
 
+import androidx.compose.runtime.Composable
+import top.brightk.bridge.core.FcRequest
 import top.brightk.bridge.core.UriRequest
 import top.brightk.bridge.core.UriRespond
 
@@ -37,9 +39,9 @@ const val CS_CODE_INTERCEPTOR_FAILURE = 700
 
 
 fun KtUrl.toKey():String{
-    return StringBuilder().append(getScheme())
+    return StringBuilder().append(getScheme().orEmpty())
         .append("-")
-        .append(getAuthority())
+        .append(getAuthority().orEmpty())
         .append("-")
         .append(getPath())
         .toString()
@@ -50,6 +52,10 @@ object Bridge {
     }
     fun call(request: UriRequest):UriRespond{
         return callService(request)
+    }
+    @Composable
+    fun call(request: FcRequest){
+        callFunction(request)
     }
 
 }

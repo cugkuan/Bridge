@@ -5,15 +5,14 @@ import createLruCache
 import top.brightk.bridge.CsService
 import top.brightk.bridge.annotation.Type
 import top.brightk.bridge.common.SafeMap
-import top.brightk.bridge.common.getSafeMap
 
 object  CsServiceManger {
 
     private val single:SafeMap<String,CsService> by lazy {
-        getSafeMap()
+        SafeMap()
     }
     private val lruCache :LruCache<String,CsService>  = createLruCache(50,{key ->
-        val config = ComponentCsServiceManger.getCsConfig(key)
+        val config = ComponentCsServiceManger.getCsConfigByKey(key)
           config?.let { config ->
               if (config.type == Type.DEFAULT){
                   config.create.invoke()
@@ -31,7 +30,7 @@ object  CsServiceManger {
     })
 
     fun getService(key:String):CsService?{
-        val config = ComponentCsServiceManger.getCsConfig(key)
+        val config = ComponentCsServiceManger.getCsConfigByKey(key)
         return if (config == null){
             null
         }else{

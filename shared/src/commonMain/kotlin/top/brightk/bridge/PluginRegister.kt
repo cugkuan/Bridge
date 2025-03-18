@@ -12,5 +12,5 @@ fun registerService(key:String,type: Type,create:()->CsService){
     ComponentCsServiceManger.register(key, CsServiceConfig(type,create))
 }
 fun registerFunction(key: String,call:@Composable (request: FcRequest)->Unit){
-    FcManger.registerByUrl(key,call)
+    FcManger.register(key,call)
 }

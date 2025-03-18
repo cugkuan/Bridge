@@ -1,5 +1,7 @@
 package top.brightk.bridge.core
 
+import androidx.compose.runtime.Composable
+import top.brightk.bridge.Bridge
 import top.brightk.bridge.getUrl
 import top.brightk.bridge.toKey
 import kotlin.reflect.KClass
@@ -57,5 +59,9 @@ class FcRequest(val url:String) {
             }
         }
         return null
+    }
+    @Composable
+    fun call(){
+        Bridge.call(this)
     }
 }

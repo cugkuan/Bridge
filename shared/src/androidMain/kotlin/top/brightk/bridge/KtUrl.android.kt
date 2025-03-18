@@ -24,13 +24,13 @@ class AndroidUrl(url: String) : KtUrl(url){
             it[key]
         }
     }
-    override fun getScheme(): String {
+    override fun getScheme(): String? {
         return  uri.scheme
     }
     override fun getHost(): String {
         return  uri.host
     }
-    override fun getAuthority(): String {
+    override fun getAuthority(): String? {
         return uri.authority
     }
     override fun getPath(): String {

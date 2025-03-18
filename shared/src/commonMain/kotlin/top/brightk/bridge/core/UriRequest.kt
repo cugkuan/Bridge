@@ -1,5 +1,7 @@
 package top.brightk.bridge.core
 
+import top.brightk.bridge.Bridge
+import top.brightk.bridge.common.WeakReference
 import top.brightk.bridge.getUrl
 import top.brightk.bridge.toKey
 import kotlin.reflect.KClass
@@ -8,11 +10,26 @@ import kotlin.reflect.cast
 const val REQUEST_PARAMS_KEY_ACTION: String = "uri_request_key_action"
 const val REQUEST_PARAMS_DEFAULT_DATA: String = "uri_request_default_data"
 
-class UriRequest(val url:String) {
+class UriRequest(val url:String,context:Any?=null) {
     private var params: MutableMap<String, Any>? = null
 
     val uri =  getUrl(url)
     val key = uri.toKey()
+
+    private var ctx:WeakReference<Any>? = null
+    init {
+        context?.let {
+            ctx = WeakReference(context)
+        }
+    }
+    fun setContext(context: Any?){
+        context?.let {
+            ctx = WeakReference(it)
+        }
+    }
+    fun getContext():Any?{
+        return  ctx?.get()
+    }
 
     var action: String?
         get() = getStringParam(REQUEST_PARAMS_KEY_ACTION)
@@ -94,7 +111,7 @@ class UriRequest(val url:String) {
 
     }
 
-    fun call(){
-
+    fun call():UriRespond{
+        return Bridge.call(this)
     }
 }
