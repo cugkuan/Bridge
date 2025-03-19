@@ -1,4 +1,4 @@
-package top.brightk.bridge.android
+package com.bridge.android
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

@@ -5,8 +5,8 @@ plugins {
     `maven-publish` // 用于发布到 Maven 仓库（可选）
 }
 
-group = "com.example.processor" // 你的处理器模块的 Group ID
-version = "1.0.0" // 版本号
+group = "top.brightk.processor" // 你的处理器模块的 Group ID
+version = "1.0.1" // 版本号
 
 repositories {
     mavenCentral() // Maven 中央仓库
@@ -19,18 +19,13 @@ dependencies {
     implementation(libs.gson)
 }
 
-// 配置 KSP 处理器
-ksp {
-    arg("option1", "value1") // 可选：传递参数给 KSP 处理器
-    arg("option2", "value2")
-}
 
 // 发布到 Maven 本地仓库（可选）
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            groupId = "com.example.processor"
+            groupId = "top.brightk.processor"
             artifactId = "processor"
             version = "1.0.0"
         }

@@ -9,10 +9,10 @@ ksp{
     arg("application","true")
 }
 android {
-    namespace = "top.brightk.bridge.android"
+    namespace = "com.bridge.android"
     compileSdk = 35
     defaultConfig {
-        applicationId = "top.brightk.bridge.android"
+        applicationId = "com.bridge.android"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -30,6 +30,13 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        getByName("debug"){
+            kotlin{
+                sourceSets.main{
+                    kotlin.srcDir("build/generated/ksp/debug/kotlin")
+                }
+            }
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -39,6 +46,7 @@ android {
         jvmTarget = "1.8"
     }
 }
+
 
 //// 配置编译器插件
 //

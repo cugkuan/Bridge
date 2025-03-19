@@ -36,16 +36,15 @@ class CreateFinalTransfer(
                     newLine(1)
                     appendText("import androidx.compose.runtime.Composable")
                     newLine(2)
-                    appendText("class $CS_TRANSFER_FINIAL_CLASS {")
                     newLine(1)
-                    appendTextWithTab("fun  init(){")
+                    appendText("fun  init(){")
                     newLine(1)
                     //cs
                     if (csService.isNotEmpty()) {
                         csService.forEach { service ->
                             appendTextWithTab(
                                 "registerService(\"${service.key}\",${service.type.name},{ ${service.className}() });",
-                                2
+                                1
                             )
                             newLine(1)
                         }
@@ -54,20 +53,29 @@ class CreateFinalTransfer(
                     if (fcList.isNotEmpty()) {
                         fcList.forEach{ fc ->
                             if (fc.hasParams) {
-                                appendTextWithTab(
-                                    "registerFunction(\"${fc.key}\", @Composable{ ${fc.functionName}(it)})",2
-                                )
+                                appendTextWithTab("registerFunction(\"${fc.key}\", @Composable {",1)
+                                appendTextWithTab("\n",1)
+                                appendTextWithTab(" ${fc.functionName}(it) ",2)
+                                appendTextWithTab("\n",1)
+                                appendTextWithTab("Unit",2)
+                                appendTextWithTab("\n",2)
+                                appendTextWithTab("})",1)
                             }else{
-                                appendTextWithTab(
-                                    "registerFunction(\"${fc.key}\", @Composable { ${fc.functionName}()})",2
-                                )
+                                appendTextWithTab("registerFunction(\"${fc.key}\", @Composable {",1)
+                                appendTextWithTab("\n",1)
+                                appendTextWithTab(" ${fc.functionName}() ",2)
+                                appendTextWithTab("\n",1)
+                                appendTextWithTab("Unit",2)
+                                appendTextWithTab("\n",2)
+                                appendTextWithTab("})",1)
                             }
+                            newLine(1)
                         }
+                        newLine(1)
                     }
                     newLine(1)
-                    appendTextWithTab("}")
-                    newLine(2)
                     appendText("}")
+                    newLine(2)
 
                 }
             }

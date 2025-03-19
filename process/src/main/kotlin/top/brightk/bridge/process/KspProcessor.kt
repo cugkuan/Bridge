@@ -1,4 +1,5 @@
 package top.brightk.bridge.process
+
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.Resolver
@@ -27,10 +28,11 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
     BaseProcessor(environment) {
     private var isScan: Boolean = true
     private var isFinish = false
+
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
-        if (isScan){
+        if (isScan) {
             val csServices = ArrayList<CsServiceNode>()
             val csServiceVisitor = CsServiceVisitor(this, csServices)
             val ksAnnotated = resolver.getSymbolsWithAnnotation(CsUrl::class.java.name)
@@ -47,38 +49,38 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
             val fcAnnotated = resolver.getSymbolsWithAnnotation(FcUrl::class.java.name)
                 .filterIsInstance<KSFunctionDeclaration>()
             fcAnnotated.forEach { function ->
-                if (function.annotations.any{it.shortName.asString() == "Composable"}){
-                    log("Fc",function.simpleName.asString())
-                    if (function.parameters.size > 1){
+                if (function.annotations.any { it.shortName.asString() == "Composable" }) {
+                    log("Fc", function.simpleName.asString())
+                    if (function.parameters.size > 1) {
                         error("最多一个参数，且参数的类型为 FcRequest")
                         throw IllegalArgumentException(" @FcUrl 方法最多一个参数")
                     }
                     if (function.parameters.isNotEmpty()) {
                         val parameter = function.parameters.first()
                         val parameterType = parameter.type.resolve().declaration.qualifiedName
-                        if (parameterType?.asString() == "top.brightk.bridge.core.FcRequest"){
+                        if (parameterType?.asString() == "top.brightk.bridge.core.FcRequest") {
                             val fcName = function.qualifiedName?.asString()
-                            val fcUrl =  function.getAnnotationsByType(FcUrl::class).first().uri
-                            log("Fc",function.qualifiedName?.asString().orEmpty())
-                            fcList.add(FcNode(fcName!!,fcUrl.toKey(),true))
-                        }else{
+                            val fcUrl = function.getAnnotationsByType(FcUrl::class).first().uri
+                            log("Fc", function.qualifiedName?.asString().orEmpty())
+                            fcList.add(FcNode(fcName!!, fcUrl.toKey(), true))
+                        } else {
                             error("参数类型只能是FcRequest")
                             throw IllegalArgumentException("@FcUrl 修饰的方法，参数类型只能是 FcRequest")
                         }
-                    }else{
+                    } else {
                         // 没有参数
                         val fcName = function.qualifiedName?.asString()
-                        val fcUrl =  function.getAnnotationsByType(FcUrl::class).first().uri
-                        log("Fc",function.qualifiedName?.asString().orEmpty())
-                        fcList.add(FcNode(fcName!!,fcUrl.toKey(),false))
+                        val fcUrl = function.getAnnotationsByType(FcUrl::class).first().uri
+                        log("Fc", function.qualifiedName?.asString().orEmpty())
+                        fcList.add(FcNode(fcName!!, fcUrl.toKey(), false))
                     }
 
-                }else{
+                } else {
                     error("${function.simpleName.asString()}没有被@Composable修饰")
                 }
             }
-            if (fcList.isNotEmpty()){
-                CreateFcTransfer(codeGenerator,fcList).create()
+            if (fcList.isNotEmpty()) {
+                CreateFcTransfer(codeGenerator, fcList).create()
             }
             isScan = false
             return ArrayList<KSAnnotated>().apply {
@@ -101,13 +103,14 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
                 }
             }
             log("一共有${csFinalServices.size}个CsService ${fcList.size}个FcUrl方法")
-            CreateFinalTransfer(codeGenerator, csFinalServices,fcList)
+            CreateFinalTransfer(codeGenerator, csFinalServices, fcList)
                 .create()
             isFinish = true
         }
 
         return emptyList()
     }
+
     override fun finish() {
         super.finish()
     }
