@@ -2,7 +2,6 @@ package top.brightk.bridge.process
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import org.w3c.dom.Node
 import java.net.URI
 import java.security.MessageDigest
 
@@ -61,8 +60,8 @@ fun <T : Any> String.parseFromJson(): T {
 fun String.getServiceNodes():List<CsServiceNode>{
     return gson.fromJson(this,object :TypeToken<List<CsServiceNode>>(){}.type)
 }
-fun String.getFcNodes():List<FcNode>{
-    return  gson.fromJson(this,object:TypeToken<List<FcNode>>(){}.type )
+fun String.getFcNodes():List<CfNode>{
+    return  gson.fromJson(this,object:TypeToken<List<CfNode>>(){}.type )
 }
 
 

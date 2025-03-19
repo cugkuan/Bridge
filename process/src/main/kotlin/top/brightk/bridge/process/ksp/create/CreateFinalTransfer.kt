@@ -5,13 +5,13 @@ import com.google.devtools.ksp.processing.Dependencies
 import top.brightk.bridge.process.CS_TRANSFER_FINIAL
 import top.brightk.bridge.process.CS_TRANSFER_FINIAL_CLASS
 import top.brightk.bridge.process.CsServiceNode
-import top.brightk.bridge.process.FcNode
+import top.brightk.bridge.process.CfNode
 
 
 class CreateFinalTransfer(
     private val codeGenerator: CodeGenerator,
     private val csService: List<CsServiceNode>,
-    private val fcList:List<FcNode>
+    private val fcList:List<CfNode>
 ) : BaseTransfer() {
 
     fun create() {
@@ -32,7 +32,7 @@ class CreateFinalTransfer(
                     newLine(1)
                     appendText("import top.brightk.bridge.annotation.Type.SINGLE")
                     newLine(1)
-                    appendText("import top.brightk.bridge.registerFunction")
+                    appendText("import top.brightk.bridge.registerCf")
                     newLine(1)
                     appendText("import androidx.compose.runtime.Composable")
                     newLine(2)
@@ -53,7 +53,7 @@ class CreateFinalTransfer(
                     if (fcList.isNotEmpty()) {
                         fcList.forEach{ fc ->
                             if (fc.hasParams) {
-                                appendTextWithTab("registerFunction(\"${fc.key}\", @Composable {",1)
+                                appendTextWithTab("registerCf(\"${fc.key}\", @Composable {",1)
                                 appendTextWithTab("\n",1)
                                 appendTextWithTab(" ${fc.functionName}(it) ",2)
                                 appendTextWithTab("\n",1)
@@ -61,7 +61,7 @@ class CreateFinalTransfer(
                                 appendTextWithTab("\n",2)
                                 appendTextWithTab("})",1)
                             }else{
-                                appendTextWithTab("registerFunction(\"${fc.key}\", @Composable {",1)
+                                appendTextWithTab("registerCf(\"${fc.key}\", @Composable {",1)
                                 appendTextWithTab("\n",1)
                                 appendTextWithTab(" ${fc.functionName}() ",2)
                                 appendTextWithTab("\n",1)

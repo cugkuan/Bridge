@@ -4,4 +4,4 @@ package top.brightk.bridge.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class FcUrl(val uri: String)
+annotation class CfUrl(val uri: String)

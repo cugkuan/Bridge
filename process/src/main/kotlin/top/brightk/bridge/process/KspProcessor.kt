@@ -7,8 +7,8 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import top.brightk.bridge.annotation.CsUrl
-import top.brightk.bridge.annotation.FcUrl
-import top.brightk.bridge.annotation.KspBridgeFc
+import top.brightk.bridge.annotation.CfUrl
+import top.brightk.bridge.annotation.KspBridgeCf
 import top.brightk.bridge.annotation.KspBridgeService
 import top.brightk.bridge.process.ksp.CsServiceVisitor
 import top.brightk.bridge.process.ksp.create.CreateCsTransfer
@@ -45,34 +45,34 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
                     .create()
             }
             // 处理函数
-            val fcList = ArrayList<FcNode>()
-            val fcAnnotated = resolver.getSymbolsWithAnnotation(FcUrl::class.java.name)
+            val fcList = ArrayList<CfNode>()
+            val fcAnnotated = resolver.getSymbolsWithAnnotation(CfUrl::class.java.name)
                 .filterIsInstance<KSFunctionDeclaration>()
             fcAnnotated.forEach { function ->
                 if (function.annotations.any { it.shortName.asString() == "Composable" }) {
-                    log("Fc", function.simpleName.asString())
+                    log("Cf", function.simpleName.asString())
                     if (function.parameters.size > 1) {
-                        error("最多一个参数，且参数的类型为 FcRequest")
+                        error("最多一个参数，且参数的类型为 CfParams")
                         throw IllegalArgumentException(" @FcUrl 方法最多一个参数")
                     }
                     if (function.parameters.isNotEmpty()) {
                         val parameter = function.parameters.first()
                         val parameterType = parameter.type.resolve().declaration.qualifiedName
-                        if (parameterType?.asString() == "top.brightk.bridge.core.FcRequest") {
+                        if (parameterType?.asString() == "top.brightk.bridge.core.CfParams") {
                             val fcName = function.qualifiedName?.asString()
-                            val fcUrl = function.getAnnotationsByType(FcUrl::class).first().uri
-                            log("Fc", function.qualifiedName?.asString().orEmpty())
-                            fcList.add(FcNode(fcName!!, fcUrl.toKey(), true))
+                            val cfUrl = function.getAnnotationsByType(CfUrl::class).first().uri
+                            log("Cf", function.qualifiedName?.asString().orEmpty())
+                            fcList.add(CfNode(fcName!!, cfUrl.toKey(), true))
                         } else {
-                            error("参数类型只能是FcRequest")
-                            throw IllegalArgumentException("@FcUrl 修饰的方法，参数类型只能是 FcRequest")
+                            error("参数类型只能是CfParams")
+                            throw IllegalArgumentException("@CfUrl 修饰的方法，参数类型只能是 CfParams")
                         }
                     } else {
                         // 没有参数
                         val fcName = function.qualifiedName?.asString()
-                        val fcUrl = function.getAnnotationsByType(FcUrl::class).first().uri
+                        val cfUrl = function.getAnnotationsByType(CfUrl::class).first().uri
                         log("Fc", function.qualifiedName?.asString().orEmpty())
-                        fcList.add(FcNode(fcName!!, fcUrl.toKey(), false))
+                        fcList.add(CfNode(fcName!!, cfUrl.toKey(), false))
                     }
 
                 } else {
@@ -91,19 +91,19 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
         val application = options["application"]
         if (application == "true" && !isFinish) {
             val csFinalServices = ArrayList<CsServiceNode>()
-            val fcList = ArrayList<FcNode>()
+            val cfList = ArrayList<CfNode>()
             resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
                 declaration.getAnnotationsByType(KspBridgeService::class).forEach { node ->
                     val json = node.json
                     csFinalServices.addAll(json.getServiceNodes())
                 }
-                declaration.getAnnotationsByType(KspBridgeFc::class).forEach { node ->
+                declaration.getAnnotationsByType(KspBridgeCf::class).forEach { node ->
                     val json = node.json
-                    fcList.addAll(json.getFcNodes())
+                    cfList.addAll(json.getFcNodes())
                 }
             }
-            log("一共有${csFinalServices.size}个CsService ${fcList.size}个FcUrl方法")
-            CreateFinalTransfer(codeGenerator, csFinalServices, fcList)
+            log("一共有${csFinalServices.size}个CsService ${cfList.size}个FcUrl方法")
+            CreateFinalTransfer(codeGenerator, csFinalServices, cfList)
                 .create()
             isFinish = true
         }

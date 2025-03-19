@@ -11,16 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import top.brightk.bridge.Bridge
 import top.brightk.bridge.Greeting
-import top.brightk.bridge.annotation.Init
-import top.brightk.bridge.annotation.Type.DEFAULT
-import top.brightk.bridge.core.FcRequest
+import top.brightk.bridge.core.CfParams
 import top.brightk.bridge.core.UriRequest
-import top.brightk.bridge.registerFunction
-import top.brightk.bridge.registerService
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,10 +48,8 @@ fun GreetingView(text: String, ctx: Context? = null) {
                     .call()
             })
 
-        FcRequest("kt://app/call")
-            .call()
-        FcRequest("kt://app/view/feature1")
-            .call()
+        Bridge.call( CfParams("kt://app/call"))
+        Bridge.call(CfParams("kt://app/view/feature1"))
 
     }
 }
