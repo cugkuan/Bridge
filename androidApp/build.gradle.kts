@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.symbol.processing.api)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     compileOnly(project(":process"))
     ksp(project(":process"))

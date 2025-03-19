@@ -6,6 +6,7 @@ compose = "1.5.4"
 compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.0"
 jetbrainsKotlinJvm = "2.1.0"
+androidx-lifecycle = "2.8.4"
 kotlinCompilerEmbeddable = "2.1.0"
 kotlinReflect = "2.0.21"
 kotlinStdlib = "2.1.10"
@@ -35,6 +36,8 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "symbolProcessingApi" }
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
