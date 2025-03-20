@@ -17,15 +17,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.brightk.bridge.CfCall
 import top.brightk.bridge.Greeting
 import top.brightk.bridge.call
-import top.brightk.bridge.core.UriRequest
+import top.brightk.bridge.get
 import top.brightk.bridge.toCfParams
 import top.brightk.feature1.TestViewModel
 
@@ -47,19 +47,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun GreetingView(text: String, ctx: Context? = null,vm:TestViewModel = TestViewModel() ) {
+fun GreetingView(text: String, ctx: Context,vm:TestViewModel = TestViewModel() ) {
     Column {
         Text(text = "测试")
         Text(
             "点击测试Cs服务", color = Color.Red,
             fontSize = 32.sp,
             modifier = Modifier.clickable {
-                UriRequest("bridge://app/featureAndroid", context = ctx)
-                    .call()
+                "bridge://app/featureAndroid".call(ctx)
             })
 
         "kt://app/call".CfCall()
         "kt://app/view/feature1".CfCall()
+
         Column(modifier = Modifier.padding(30.dp)) {
             val count by  vm.count.collectAsState()
             val request  by remember {
@@ -73,13 +73,25 @@ fun GreetingView(text: String, ctx: Context? = null,vm:TestViewModel = TestViewM
             request.call()
         }
 
+
+        Column(modifier = Modifier.padding(30.dp)) {
+            Button({
+                "bridge://app/feature2/test1".call("click","info" to "传递参数测试")
+            }) {
+                Text("测试CService数据传递,看日志输出")
+            }
+
+            var count by remember { mutableStateOf(0) }
+            Button(modifier = Modifier.padding(top = 10.dp), onClick = {
+                 "bridge://app/feature2/test2".get<Int>("count" to count)?.let {
+                     count = it
+                 }
+            }) {
+                Text("点击，测试服务处理数据：$count")
+            }
+        }
+
     }
 }
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
-    }
-}
+

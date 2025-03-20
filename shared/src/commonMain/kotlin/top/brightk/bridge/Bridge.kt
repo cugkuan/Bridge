@@ -2,7 +2,7 @@ package top.brightk.bridge
 
 import androidx.compose.runtime.Composable
 import top.brightk.bridge.core.CfParams
-import top.brightk.bridge.core.UriRequest
+import top.brightk.bridge.core.CsRequest
 import top.brightk.bridge.core.UriRespond
 
 const val CS_CODE_SUCCEED = 200
@@ -48,7 +48,7 @@ fun String.toKtUrl() = getUrl(this)
 object Bridge {
     fun init(){
     }
-    fun call(request: UriRequest):UriRespond{
+    fun call(request: CsRequest): UriRespond {
         return callService(request)
     }
     @Composable

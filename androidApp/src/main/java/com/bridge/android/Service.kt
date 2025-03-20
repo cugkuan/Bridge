@@ -7,8 +7,8 @@ import top.brightk.bridge.CsService
 import top.brightk.bridge.annotation.CfUrl
 import top.brightk.bridge.annotation.CsUrl
 import top.brightk.bridge.core.CfParams
-import top.brightk.bridge.core.SUCCEED
-import top.brightk.bridge.core.UriRequest
+import top.brightk.bridge.core.Succeed
+import top.brightk.bridge.core.CsRequest
 import top.brightk.bridge.core.UriRespond
 
 
@@ -21,8 +21,8 @@ fun test(request: CfParams){
 
 @CsUrl("kt://app/test")
 class Service :CsService {
-    override fun call(request: UriRequest): UriRespond {
+    override fun call(request: CsRequest): UriRespond {
         Log.e("lmk","服务测试")
-        return SUCCEED("")
+        return Succeed("")
     }
 }
