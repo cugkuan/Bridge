@@ -15,36 +15,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import top.brightk.bridge.Bridge
 import top.brightk.bridge.annotation.CfUrl
-import top.brightk.bridge.core.CfParams
+import top.brightk.bridge.call
+import top.brightk.bridge.toCfParams
 
 
 @CfUrl("kt://app/view/feature1")
 @Composable
-fun test1(){
+fun test1() {
     var number by remember { mutableStateOf(1) }
-    var request  by remember {
-        mutableStateOf( CfParams("kt://app/view/feature2").apply {
-            data = number
-        })
+    var request by remember {
+        mutableStateOf("kt://app/view/feature2".toCfParams(number))
     }
-    Column{
+    Column {
         Text("这个是Feature1中的界面显示", color = Color.Green)
         Button(onClick = {
             number++
             request = request.clone(number)
-        }){
+        }) {
             println(number)
             Text("点击传递数据:${number}")
         }
         println("这里被重组了===>$number")
-        Box(modifier = Modifier
-            .padding(top = 20.dp)
-            .fillMaxWidth()
-            .height(50.dp)){
-             Bridge.call(request)
+        Box(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            request.call()
         }
 
     }
 }
+
