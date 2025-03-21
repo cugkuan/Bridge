@@ -1,22 +1,25 @@
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
-    repositories {
-        google()
-        gradlePluginPortal()
-        mavenCentral()
-    }
+    apply(from = "gradle/dependencies.gradle.kts")
+    val settingsRepository : Action<RepositoryHandler> by extra
+    repositories(settingsRepository)
 }
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    apply(from = "gradle/dependencies.gradle.kts")
+    val settingsRepository : Action<RepositoryHandler> by extra
+    repositories(settingsRepository)
 }
 
-rootProject.name = "bridge"
+
+
+rootProject.name = "BridgeApp"
 include(":androidApp")
-include(":shared")
+include(":bridge")
 include(":process")
 include(":feature1")
 include(":feature2")

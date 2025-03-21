@@ -57,7 +57,8 @@ android {
 //}
 
 dependencies {
-    implementation(projects.shared)
+    implementation(libs.bridge.lib) // 版本号要匹配
+   // implementation(projects.shared)
     implementation(projects.feature1)
     implementation(projects.feature2)
     implementation(libs.compose.ui)
@@ -69,8 +70,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    compileOnly(project(":process"))
-    ksp(project(":process"))
+    compileOnly(libs.bridge.ksp)
+    ksp(libs.bridge.ksp)
     //compileOnly(project(":kcpPlugin"))
-    add("kotlinCompilerPluginClasspath", project(":kcpPlugin"))
+    add("kotlinCompilerPluginClasspath", libs.bridge.kcp)
 }

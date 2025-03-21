@@ -1,40 +1,15 @@
 plugins {
-   // kotlin("jvm")
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.ksp)
-    `maven-publish` // 用于发布到 Maven 仓库（可选）
+    `maven-publish`
+    `signing`
+    id("java")
 }
-
-group = "top.brightk.processor" // 你的处理器模块的 Group ID
-version = "1.0.1" // 版本号
-
-repositories {
-    mavenCentral() // Maven 中央仓库
-    google() // Google Maven 仓库（KSP 依赖需要）
-}
-
 dependencies {
     implementation(kotlin("stdlib")) // Kotlin 标准库
     implementation(libs.symbol.processing.api) // KSP API
     implementation(libs.gson)
 }
-
-
-// 发布到 Maven 本地仓库（可选）
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-            groupId = "top.brightk.processor"
-            artifactId = "processor"
-            version = "1.0.0"
-        }
-    }
-    repositories {
-        mavenLocal() // 发布到本地 Maven 仓库
-    }
-}
-
 // 配置 Java 兼容性
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -44,4 +19,76 @@ java {
 // 配置 Kotlin 编译目标
 kotlin {
     jvmToolchain(11) // 使用 JDK 11
+}
+
+try {
+    apply(from = "${rootProject.rootDir.parent}/gradle/publish.gradle.kts")
+}catch (e:Exception){
+    apply(from = "${rootDir}/gradle/publish.gradle.kts")
+}
+
+//java {
+//    withJavadocJar()
+//    withSourcesJar()
+//}
+
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(tasks.getByName("javadoc"))
+}
+
+
+
+group = "top.brightk"
+version = "0.0.1"
+
+val uploadRepository: Action<RepositoryHandler> by extra
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            artifactId = "bridge-ksp"
+            groupId = project.group.toString()
+            version = project.version.toString()
+            from(components["kotlin"])
+
+            artifact(tasks["sourcesJar"]) // Add sources JAR
+            artifact(tasks["javadocJar"]) // Add Javadoc JAR
+
+            pom {
+                // public maven must
+                name.set("Bridge ksp")
+                description.set("Bridge ksp,work for Bridge;Ksp插件,负责自动化注册")
+                val pomUrl = "https://github.com/cugkuan/Bridge"
+                val pomScm = "https://github.com/cugkuan/Bridge.git"
+                url.set(pomUrl)
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("BrightK")
+                        name.set("BrightK")
+                        email.set("cugkuan@163.com")
+                    }
+                }
+                scm {
+                    connection.set(pomUrl)
+                    developerConnection.set(pomScm)
+                    url.set(pomUrl)
+                }
+            }
+        }
+    }
+    repositories(uploadRepository)
+}
+
+signing {
+    sign(publishing.publications["release"])
 }

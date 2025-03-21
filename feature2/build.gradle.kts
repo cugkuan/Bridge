@@ -33,7 +33,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(kotlin("reflect"))
-            implementation(projects.shared)
             implementation(libs.kotlin.reflect)
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -58,11 +57,12 @@ android {
     }
 }
 dependencies{
-    implementation(projects.shared)
-    add("kspCommonMainMetadata", project(":process"))
-    add("kspAndroid", project(":process"))
-    add("kspIosX64", project(":process"))
-    add("kspIosArm64", project(":process"))
-    add("kspIosSimulatorArm64", project(":process"))
+    implementation(libs.bridge.lib)
+    val ksp = libs.bridge.ksp
+    add("kspCommonMainMetadata",ksp)
+    add("kspAndroid",ksp)
+    add("kspIosX64",ksp)
+    add("kspIosArm64",ksp)
+    add("kspIosSimulatorArm64",ksp)
 }
 
