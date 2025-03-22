@@ -5,7 +5,19 @@ Bridge 是一个 kmp(kotlin multiplatform) 轻量级组件库。支持跨组件 
 
 # 基本使用
 
+
+在主module 中
+
+
 ```kt
+
+plugins {
+    alias(libs.plugins.ksp)
+}
+
+ksp{
+    arg("application","true")
+}
 
 // 库依赖
 implementation("top.brightk:bridge:0.0.2")
