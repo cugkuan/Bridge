@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.composeMultiplatform)
 }
-
 kotlin {
     androidTarget {
         compilations.all {
@@ -59,8 +58,9 @@ android {
     }
 }
 dependencies{
-    implementation(libs.bridge.lib)
-    val ksp = libs.bridge.ksp
+   // implementation(libs.bridge.lib)
+    implementation(projects.bridge)
+    val ksp = projects.process
     add("kspCommonMainMetadata",ksp)
     add("kspAndroid",ksp)
     add("kspIosX64",ksp)

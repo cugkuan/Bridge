@@ -9,6 +9,7 @@ dependencies {
     implementation(kotlin("stdlib")) // Kotlin 标准库
     implementation(libs.symbol.processing.api) // KSP API
     implementation(libs.gson)
+    compileOnly(libs.kotlin.compiler.embeddable) // Kotlin compiler
 }
 // 配置 Java 兼容性
 java {
@@ -45,6 +46,7 @@ tasks.register<Jar>("javadocJar") {
 
 group = "top.brightk"
 version = "0.0.1"
+
 
 val uploadRepository: Action<RepositoryHandler> by extra
 publishing {

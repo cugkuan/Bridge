@@ -12,17 +12,17 @@ import top.brightk.bridge.core.CsRequest
 import top.brightk.bridge.core.UriRespond
 
 
-@CfUrl("kt://app/call")
-@Composable
-fun test(request: CfParams){
-    Text("这是一个服务测试")
-}
-
-
-@CsUrl("kt://app/test")
-class Service :CsService {
-    override fun call(request: CsRequest): UriRespond {
-        Log.e("lmk","服务测试")
-        return Succeed("")
-    }
-}
+//@CfUrl("kt://app/call")
+//@Composable
+//fun test(request: CfParams){
+//    Text("这是一个服务测试")
+//}
+//
+//
+//@CsUrl("kt://app/test")
+//class Service :CsService {
+//    override fun call(request: CsRequest): UriRespond {
+//        Log.e("lmk","服务测试")
+//        return Succeed("")
+//    }
+//}

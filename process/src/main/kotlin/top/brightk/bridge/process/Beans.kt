@@ -13,3 +13,5 @@ data class CfNode(
     val key: String,
     val hasParams:Boolean
 )
+
+data class InitNode(val functionName: String)

@@ -42,7 +42,6 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 bridge-lib = {group ="top.brightk", name = "bridge",version.ref = "bridge-lib"}
-
 bridge-ksp = {group = "top.brightk",name = "bridge-ksp",version.ref = "bridge"}
 bridge-kcp = {group = "top.brightk",name = "bridge-kcp",version.ref = "bridge"}
 

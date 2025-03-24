@@ -30,13 +30,13 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
-        getByName("debug"){
-            kotlin{
-                sourceSets.main{
-                    kotlin.srcDir("build/generated/ksp/debug/kotlin")
-                }
-            }
-        }
+//        getByName("debug"){
+//            kotlin{
+//                sourceSets.main{
+//                    kotlin.srcDir("build/generated/ksp/debug/kotlin")
+//                }
+//            }
+//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -57,8 +57,8 @@ android {
 //}
 
 dependencies {
-    implementation(libs.bridge.lib) // 版本号要匹配
-   // implementation(projects.shared)
+   // implementation(libs.bridge.lib) // 版本号要匹配
+    implementation(projects.bridge)
     implementation(projects.feature1)
     implementation(projects.feature2)
     implementation(libs.compose.ui)
@@ -70,8 +70,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    compileOnly(libs.bridge.ksp)
-    ksp(libs.bridge.ksp)
-    //compileOnly(project(":kcpPlugin"))
-    add("kotlinCompilerPluginClasspath", libs.bridge.kcp)
+
+    ksp(projects.process)
+    add("kotlinCompilerPluginClasspath", projects.process)
 }

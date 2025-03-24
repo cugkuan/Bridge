@@ -8,12 +8,14 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import top.brightk.bridge.annotation.CsUrl
 import top.brightk.bridge.annotation.CfUrl
+import top.brightk.bridge.annotation.Init
 import top.brightk.bridge.annotation.KspBridgeCf
 import top.brightk.bridge.annotation.KspBridgeService
 import top.brightk.bridge.process.ksp.CsServiceVisitor
 import top.brightk.bridge.process.ksp.create.CreateCsTransfer
 import top.brightk.bridge.process.ksp.create.CreateFcTransfer
 import top.brightk.bridge.process.ksp.create.CreateFinalTransfer
+import top.brightk.bridge.process.ksp.create.CreateInitTransfer
 
 
 const val CS_TRANSFER_FINIAL = "com.brightk.bridge"
@@ -32,7 +34,22 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
+        val application = options["application"]
         if (isScan) {
+            // 处理 Init，因为Ksp 的工作原理决定的
+            if (application == "true") {
+                resolver.getSymbolsWithAnnotation(Init::class.java.name)
+                    .filterIsInstance<KSFunctionDeclaration>()
+                    .firstOrNull()?.let { function ->
+                        log("BridgeInit: ${function.qualifiedName?.asString()}")
+                        CreateInitTransfer(
+                            codeGenerator,
+                            InitNode(function.qualifiedName!!.asString())
+                        )
+                            .create()
+                    }
+            }
+            // 处理Cs服务
             val csServices = ArrayList<CsServiceNode>()
             val csServiceVisitor = CsServiceVisitor(this, csServices)
             val ksAnnotated = resolver.getSymbolsWithAnnotation(CsUrl::class.java.name)
@@ -82,13 +99,14 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
             if (fcList.isNotEmpty()) {
                 CreateFcTransfer(codeGenerator, fcList).create()
             }
+
             isScan = false
             return ArrayList<KSAnnotated>().apply {
                 addAll(ksAnnotated.toList())
                 addAll(fcAnnotated.toList())
             }
         }
-        val application = options["application"]
+
         if (application == "true" && !isFinish) {
             val csFinalServices = ArrayList<CsServiceNode>()
             val cfList = ArrayList<CfNode>()
