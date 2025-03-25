@@ -66,7 +66,7 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.2"
+version = "0.0.3"
 
 apply(from = "${rootProject.projectDir}/gradle/publish.gradle.kts")
 val uploadRepository: Action<RepositoryHandler> by extra
