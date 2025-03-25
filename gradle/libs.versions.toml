@@ -19,6 +19,7 @@ compose-multiplatform = "1.7.0"
 runtimeAndroid = "1.7.6"
 bridge = "0.0.1"
 bridge-lib = "0.0.2"
+navigationComposeVersion = "2.8.0-alpha10"
 
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -40,6 +41,8 @@ androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime
 
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 
 bridge-lib = {group ="top.brightk", name = "bridge",version.ref = "bridge-lib"}
 bridge-ksp = {group = "top.brightk",name = "bridge-ksp",version.ref = "bridge"}

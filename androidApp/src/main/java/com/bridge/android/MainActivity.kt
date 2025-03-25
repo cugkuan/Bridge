@@ -20,8 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import top.brightk.bridge.CfCall
 import top.brightk.bridge.Greeting
 import top.brightk.bridge.call
@@ -35,19 +38,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         initInject()
         setContent {
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    GreetingView(Greeting().greet(), this@MainActivity)
-                }
-            }
+            MyNavHost()
         }
     }
 }
 @Composable
-fun GreetingView(text: String, ctx: Context,vm:TestViewModel = TestViewModel() ) {
+fun GreetingView(text: String,vm:TestViewModel = TestViewModel(),navHostController: NavHostController ) {
+    val ctx = LocalContext.current
     Column {
         Text(text = "测试")
         Text(
@@ -89,6 +86,11 @@ fun GreetingView(text: String, ctx: Context,vm:TestViewModel = TestViewModel() )
             }) {
                 Text("点击，测试服务处理数据：$count")
             }
+        }
+        Button({
+            navHostController.navigate("screen://app/feature1")
+        }) {
+            Text("点击去另一个页面")
         }
 
     }

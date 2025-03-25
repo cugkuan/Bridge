@@ -39,6 +39,9 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.navigation.compose)
+            implementation(projects.bridge)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -58,7 +61,6 @@ android {
 }
 dependencies{
     //implementation(libs.bridge.lib)
-    implementation(projects.bridge)
     val ksp = projects.process
     add("kspCommonMainMetadata",ksp)
     add("kspAndroid",ksp)

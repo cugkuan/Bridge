@@ -14,4 +14,10 @@ data class CfNode(
     val hasParams:Boolean
 )
 
-data class InitNode(val functionName: String)
+data class FunNode(val functionName: String)
+
+data class NavNode(
+    val functionName: String,
+    val url:String,
+    val hasParams: Boolean
+)

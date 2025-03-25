@@ -40,6 +40,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.navigation.compose)
+            implementation(projects.bridge)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -58,8 +60,8 @@ android {
     }
 }
 dependencies{
-   // implementation(libs.bridge.lib)
-    implementation(projects.bridge)
+   implementation(libs.androidx.runtime.android)
+    // implementation(libs.bridge.lib)
     val ksp = projects.process
     add("kspCommonMainMetadata",ksp)
     add("kspAndroid",ksp)

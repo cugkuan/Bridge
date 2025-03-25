@@ -64,5 +64,9 @@ fun String.getFcNodes():List<CfNode>{
     return  gson.fromJson(this,object:TypeToken<List<CfNode>>(){}.type )
 }
 
+fun String.getNavNode():List<NavNode>{
+    return  gson.fromJson(this,object:TypeToken<List<NavNode>>(){}.type )
+}
+
 
 

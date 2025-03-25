@@ -4,11 +4,12 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import top.brightk.bridge.process.CS_TRANSFER_PACKET
 import top.brightk.bridge.process.FunNode
+import top.brightk.bridge.process.NAV_INJECT_BRIDGE
 
 /**
  * 由于 ksp 的工作原理，决定
  */
-class CreateInitTransfer(
+class CreateInjectTransfer(
     private val codeGenerator: CodeGenerator,
     private val node: FunNode
 ) : BaseTransfer() {
@@ -23,13 +24,12 @@ class CreateInitTransfer(
                 with(stream) {
                     appendText("package ${top.brightk.bridge.process.CS_TRANSFER_PACKET}")
                     newLine(2)
-                    appendText("import ${top.brightk.bridge.annotation.KspBridgeInit::class.java.name}")
+                    appendText("import $NAV_INJECT_BRIDGE")
                     newLine(2)
 
-
-                    appendText("@KspBridgeInit(className = \"${node.functionName}\")")
+                    appendText("@KspBridgeNavInject(className = \"${node.functionName}\")")
                     newLine(1)
-                    appendText("val initFunction:String? = null")
+                    appendText("val navInjectFunction:String? = null")
                     newLine(2)
 
                 }

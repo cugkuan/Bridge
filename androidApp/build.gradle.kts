@@ -7,6 +7,7 @@ plugins {
 
 ksp{
     arg("application","true")
+    arg("navInject","true")
 }
 android {
     namespace = "com.bridge.android"
@@ -69,7 +70,7 @@ dependencies {
     implementation(libs.symbol.processing.api)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.runtime.compose)
-
+    implementation(libs.navigation.compose)
 
     ksp(projects.process)
     add("kotlinCompilerPluginClasspath", projects.process)
