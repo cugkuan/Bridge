@@ -7,4 +7,4 @@ package top.brightk.bridge.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NavUrl(val uri: String)
+annotation class NavGraph

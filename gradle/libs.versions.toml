@@ -60,3 +60,6 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
 ksp = { id = "com.google.devtools.ksp", version.ref = "symbolProcessingApi" }
 kcp = {id = "org.jetbrains.kotlin.plugin.compiler",version.ref = "kcp"}
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

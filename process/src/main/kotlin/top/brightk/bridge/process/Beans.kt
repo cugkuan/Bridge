@@ -17,7 +17,7 @@ data class CfNode(
 data class FunNode(val functionName: String)
 
 data class NavNode(
+    val packName:String,
     val functionName: String,
-    val url:String,
-    val hasParams: Boolean
+    val aliasName:String
 )

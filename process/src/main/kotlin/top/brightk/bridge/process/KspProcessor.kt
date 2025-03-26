@@ -31,7 +31,7 @@ const val NAV_INJECT = "top.brightk.bridge.annotation.NavGraphInject"
 const val NAV_INJECT_BRIDGE = "top.brightk.bridge.annotation.KspBridgeNavInject"
 
 
-const val NAV_URL = "top.brightk.bridge.annotation.NavUrl"
+const val NAV_URL = "top.brightk.bridge.annotation.NavGraph"
 const val NAV_URL_BRIDGE = "top.brightk.bridge.annotation.KspBridgeNav"
 
 

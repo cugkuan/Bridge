@@ -21,22 +21,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import top.brightk.bridge.annotation.CfUrl
-import top.brightk.bridge.annotation.NavUrl
+import top.brightk.bridge.annotation.NavGraph
 import top.brightk.bridge.call
 import top.brightk.bridge.toCfParams
 
 
-@NavUrl("screen://app/feature1")
+
+
+@NavGraph
+fun NavGraphBuilder.navFeature(controller: NavHostController){
+    composable( route = "screen://app/feature1"
+    ) {
+        FeatureScreen(controller,it)
+    }
+}
+
+
 @Composable
 fun FeatureScreen(controller: NavHostController, backStackEntry: NavBackStackEntry) {
-
     Box(modifier = Modifier.fillMaxSize().background(Color.Cyan)) {
         Text(
             "这是新的一屏幕,点击去第二屏幕", modifier = Modifier.align(Alignment.Center)
             .clickable {
-                controller.navigate("screen://app/feature2")
+                controller.navigate("screen://app/feature2?text=${"这是传递过来的参数"}")
             }, color = Color.Black, fontSize = 36.sp)
 
         Text(

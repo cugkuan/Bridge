@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
     `maven-publish`
     `signing`
 }
@@ -27,7 +28,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(kotlin("reflect"))
                 implementation(libs.kotlin.reflect)
                 implementation(compose.runtime)
                 implementation(compose.foundation)

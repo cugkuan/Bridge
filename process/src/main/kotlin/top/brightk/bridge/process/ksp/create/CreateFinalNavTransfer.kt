@@ -37,26 +37,22 @@ class CreateFinalNavTransfer(
                     appendText("import androidx.navigation.compose.composable")
                     newLine(1)
                     appendText("import androidx.navigation.compose.rememberNavController")
-                    newLine(2)
+                    newLine(1)
+                    navNodes.forEach { node ->
+                        appendText("import ${node.packName}.${node.functionName} as ${node.aliasName}")
+                        newLine(1)
+                    }
                     newLine(1)
                     // 创建一个新的方法
                     appendText("fun  NavGraphBuilder.navInit(controller: NavHostController){")
-                    newLine(1)
+                    newLine(2)
                     navNodes.forEach { node ->
-                        appendTextWithTab("composable(\"${node.url}\") {", 1)
-                        if (node.hasParams) {
-                            appendTextWithTab("${node.functionName}(controller,it)", 2)
-                        }else{
-                            appendTextWithTab("${node.functionName}(controller)",2)
-                        }
-                        appendTextWithTab("}", 1)
+                        appendTextWithTab("${node.aliasName}(controller)", 1)
                         newLine(1)
                     }
-
                     newLine(1)
                     appendText("}")
                     newLine(2)
-
                 }
             }
     }
