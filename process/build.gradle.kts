@@ -45,7 +45,7 @@ tasks.register<Jar>("javadocJar") {
 
 
 group = "top.brightk"
-version = "0.0.3"
+version = "0.0.4"
 
 
 val uploadRepository: Action<RepositoryHandler> by extra
