@@ -34,7 +34,6 @@ fun test1(fq: CfParams) {
 
         Text("显示参数 :${fq.data}", color = Color.Red)
     }
-
 }
 
 @NavGraph

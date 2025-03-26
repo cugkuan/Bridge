@@ -16,7 +16,8 @@ fun navProcess(list: List<KSFunctionDeclaration>, log: (msg: String) -> Unit): L
             val parameterType = parameter.type.resolve().declaration.qualifiedName
             val fcName = function.qualifiedName?.asString()
             val packName = function.packageName.asString()
-            val aliasName = fcName!!.md5()
+            // 防止以数据开头，造成非法
+            val aliasName = "F"+fcName!!.md5()
             log("$packName   ${function.simpleName.asString()}  ${aliasName}")
             if (parameterType?.asString() == "androidx.navigation.NavHostController") {
                 fcList.add(NavNode(packName, function.simpleName.asString(), aliasName))
