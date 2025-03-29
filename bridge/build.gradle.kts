@@ -50,7 +50,7 @@ android {
     namespace = "top.brightk.bridge"
     compileSdk = 35
     defaultConfig {
-        minSdk = 24
+        minSdk = 21
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -66,7 +66,7 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.4"
+version = "0.0.4.1"
 
 apply(from = "${rootProject.projectDir}/gradle/publish.gradle.kts")
 val uploadRepository: Action<RepositoryHandler> by extra

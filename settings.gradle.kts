@@ -21,5 +21,5 @@ rootProject.name = "BridgeApp"
 include(":androidApp")
 include(":bridge")
 include(":process")
-include(":feature1")
-include(":feature2")
+include(":Feature:feature1")
+include(":Feature:feature2")

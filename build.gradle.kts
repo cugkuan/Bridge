@@ -11,3 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
 }
 
+subprojects {
+    project.logger.warn(project.name)
+}
+

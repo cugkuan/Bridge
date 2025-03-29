@@ -29,15 +29,11 @@ android {
     }
     buildTypes {
         getByName("release") {
+            isDebuggable = true
             isMinifyEnabled = false
         }
-//        getByName("debug"){
-//            kotlin{
-//                sourceSets.main{
-//                    kotlin.srcDir("build/generated/ksp/debug/kotlin")
-//                }
-//            }
-//        }
+        getByName("debug"){
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -60,8 +56,8 @@ android {
 dependencies {
    // implementation(libs.bridge.lib) // 版本号要匹配
     implementation(projects.bridge)
-    implementation(projects.feature1)
-    implementation(projects.feature2)
+    implementation(project(":Feature:feature1"))
+    implementation(project(":Feature:feature2"))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
@@ -72,6 +68,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.navigation.compose)
 
+    kotlinCompilerPluginClasspath(projects.process)
     ksp(projects.process)
-    add("kotlinCompilerPluginClasspath", projects.process)
 }
