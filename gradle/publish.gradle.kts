@@ -17,11 +17,8 @@ val ossrhPassword: String by properties
 val uploadRepository: Action<RepositoryHandler> = Action<RepositoryHandler> {
     maven {
         val publicUrl = when {
-            version.toString()
-                .endsWith("SNAPSHOT") -> "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
             version.toString().endsWith(".test") -> testUrl
-            else -> "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            else -> "https://central.sonatype.com/api/v1/publisher/deploy/maven"
         }
         url = uri(publicUrl)
         isAllowInsecureProtocol = true

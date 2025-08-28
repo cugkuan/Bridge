@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -6,8 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
-    `maven-publish`
-    `signing`
+    alias(libs.plugins.publish)
 }
 kotlin {
     androidTarget {
@@ -66,63 +66,45 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.4.1"
+version = "0.0.5.0"
 
-apply(from = "${rootProject.projectDir}/gradle/publish.gradle.kts")
-val uploadRepository: Action<RepositoryHandler> by extra
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            artifactId = "bridge"
-            groupId = "top.brightk"
-            version = project.version.toString()
-            from(components["kotlin"])
-        }
-        withType<MavenPublication>().configureEach {
-            artifactId = "bridge"
-            groupId = "top.brightk"
-            version = project.version.toString()
-            pom {
-                name.set("Bridge")
-                description.set(
-                    "Bridge is a lightweight componentized framework work on KMP \n" +
-                            "Bridge 是一个轻量级的组件化框架，可以在KMP上工作。\n" +
-                            "\n"
-                )
-                val pomUrl = "https://github.com/cugkuan/Bridge"
-                val pomScm = "https://github.com/cugkuan/Bridge.git"
-                url.set(pomUrl)
-                licenses {
-                    license {
-                        name.set("The Apache Software License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("BrightK")
-                        name.set("BrightK")
-                        email.set("cugkuan@163.com")
-                    }
-                }
-                scm {
-                    connection.set(pomUrl)
-                    developerConnection.set(pomScm)
-                    url.set(pomUrl)
-                }
+    signAllPublications()
+    coordinates("top.brightk", "bridge", project.version.toString())
+
+    pom {
+        name.set("Bridge")
+        description.set(
+            "Bridge is a lightweight componentized framework work on KMP \n" +
+                    "Bridge 是一个轻量级的组件化框架，可以在KMP上工作。\n" +
+                    "\n"
+        )
+        inceptionYear = "2025"
+        url = "https://github.com/cugkuan/Bridge/"
+        licenses {
+            license {
+                name.set("The Apache Software License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                description ="http://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
+        developers {
+            developer {
+                id.set("BrightK")
+                name.set("BrightK")
+                email.set("cugkuan@163.com")
+                url ="https://github.com/cugkuan/Bridge"
+            }
+        }
+        scm {
+            url ="https://github.com/cugkuan/Bridge/"
+            connection = "https://github.com/cugkuan/Bridge.git"
+            developerConnection = "https://github.com/cugkuan/Bridge.git"
+        }
     }
-    repositories(uploadRepository)
 }
-// 下面的配置不要改
-signing {
-    //useGpgCmd()
-    sign(publishing.publications)
-    //sign(publishing.publications["maven"])
-}
-
 
 
 
