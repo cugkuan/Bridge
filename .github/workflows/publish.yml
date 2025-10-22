@@ -7,17 +7,32 @@ jobs:
   publish:
     name: Release build and publish
     runs-on: macOS-latest
+
     steps:
+      # 1️⃣ 检出代码
       - name: Check out code
         uses: actions/checkout@v4
+
+      # 2️⃣ 安装 JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 21
-      - name: Publish to MavenCentral
-        run: |
-            ./gradlew :bridge:publishToMavenCentral --no-configuration-cache
+
+      # 3️⃣ 发布 KMP 模块
+      - name: Publish KMP module
+        run: ./gradlew :bridge:publishToMavenCentral --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
+
+      # 4️⃣ 发布 KCP 插件模块
+      - name: Publish KCP plugin
+        run: ./gradlew :process:publishToMavenCentral --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
