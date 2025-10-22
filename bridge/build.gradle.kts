@@ -66,7 +66,7 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.5.0"
+version = "0.0.6.0"
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
