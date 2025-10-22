@@ -47,7 +47,7 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
-        val application = options["application"]
+        val application = options["bridgeEntry"]
 
         val processAnnotated = ArrayList<KSAnnotated>()
         if (isScan) {
