@@ -67,7 +67,7 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.6.1"
+version = "0.0.7.0"
 
 mavenPublishing {
     coordinates("top.brightk", "bridge", project.version.toString())
