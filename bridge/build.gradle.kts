@@ -26,24 +26,25 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kotlin.reflect)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
             }
         }
-        val androidMain by getting {
-            dependencies {
-                dependsOn(commonMain)
-            }
+        androidMain {
+            dependencies {}
         }
-        val iosMain by creating {
-            dependsOn(commonMain)
+        iosX64Main {
+            dependencies {}
         }
-        val iosX64Main by getting { dependsOn(iosMain) }
-        val iosArm64Main by getting { dependsOn(iosMain) }
-        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
+        iosArm64Main {
+            dependencies {}
+        }
+        iosSimulatorArm64Main {
+            dependencies {}
+        }
     }
 }
 android {
@@ -66,14 +67,12 @@ android {
 }
 
 group = "top.brightk"
-version = "0.0.6.0"
+version = "0.0.6.1"
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-    signAllPublications()
     coordinates("top.brightk", "bridge", project.version.toString())
-
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
     pom {
         name.set("Bridge")
         description.set(
@@ -87,7 +86,7 @@ mavenPublishing {
             license {
                 name.set("The Apache Software License, Version 2.0")
                 url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                description ="http://www.apache.org/licenses/LICENSE-2.0.txt"
+                description = "http://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
         developers {
@@ -95,11 +94,11 @@ mavenPublishing {
                 id.set("BrightK")
                 name.set("BrightK")
                 email.set("cugkuan@163.com")
-                url ="https://github.com/cugkuan/Bridge"
+                url = "https://github.com/cugkuan/Bridge"
             }
         }
         scm {
-            url ="https://github.com/cugkuan/Bridge/"
+            url = "https://github.com/cugkuan/Bridge/"
             connection = "https://github.com/cugkuan/Bridge.git"
             developerConnection = "https://github.com/cugkuan/Bridge.git"
         }
