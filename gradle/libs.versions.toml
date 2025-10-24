@@ -1,24 +1,22 @@
 [versions]
 agp = "8.9.0"
 gson = "2.10.1"
-kotlin = "2.1.21"
+kotlin = "2.2.20"
 compose = "1.8.2"
 compose-material3 = "1.1.2"
 androidx-activityCompose = "1.9.3"
 jetbrainsKotlinJvm = "2.1.0"
 androidx-lifecycle = "2.8.4"
-kotlinCompilerEmbeddable = "2.1.0"
-kotlinReflect = "2.0.21"
-kotlinStdlib = "2.1.10"
+kotlinCompilerEmbeddable = "2.2.20"
+kotlinReflect = "2.2.20"
+kotlinStdlib = "2.2.20"
 runner = "1.5.2"
 core = "1.5.0"
 junit = "1.1.5"
-symbolProcessingApi = "2.1.21-2.0.1"
+symbolProcessingApi = "2.2.20-2.0.4"
 kcp = "2.1.0"
 compose-multiplatform = "1.8.2"
 runtimeAndroid = "1.8.2"
-bridge = "0.0.4.1"
-bridge-lib = "0.0.5.0"
 navigationComposeVersion = "2.9.0-beta05"
 
 [libraries]
@@ -44,9 +42,6 @@ androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle
 
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 
-bridge-lib = { group = "top.brightk", name = "bridge", version.ref = "bridge-lib" }
-bridge-ksp = { group = "top.brightk", name = "bridge-ksp", version.ref = "bridge" }
-bridge-kcp = { group = "top.brightk", name = "bridge-kcp", version.ref = "bridge" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
