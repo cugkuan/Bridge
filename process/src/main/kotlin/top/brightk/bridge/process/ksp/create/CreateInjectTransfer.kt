@@ -17,12 +17,12 @@ class CreateInjectTransfer(
     fun create() {
         val className = getCreateName()
         codeGenerator.createNewFile(
-            Dependencies(false),
+            Dependencies(true),
             CS_TRANSFER_PACKET, className, "kt"
         )
             .use { stream ->
                 with(stream) {
-                    appendText("package ${top.brightk.bridge.process.CS_TRANSFER_PACKET}")
+                    appendText("package $CS_TRANSFER_PACKET")
                     newLine(2)
                     appendText("import $NAV_INJECT_BRIDGE")
                     newLine(2)
