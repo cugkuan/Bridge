@@ -21,3 +21,7 @@ data class NavNode(
     val functionName: String,
     val aliasName:String
 )
+
+fun NavNode.getKey(): String{
+    return packName+functionName +aliasName
+}
