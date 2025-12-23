@@ -27,16 +27,21 @@ class AppKspProcessor(
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge working: ${resolver.getModuleName().asString()}")
         // 只做“收集”，不生成任何文件
-        resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
-            declaration.getAnnotationsByType(KspBridgeService::class).forEach { annotation ->
-                serviceNodes.addAll(annotation.json.getServiceNodes())
+        try {
+
+            resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
+                declaration.getAnnotationsByType(KspBridgeService::class).forEach { annotation ->
+                    serviceNodes.addAll(annotation.json.getServiceNodes())
+                }
+                declaration.getAnnotationsByType(KspBridgeCf::class).forEach { annotation ->
+                    cfNodes.addAll(annotation.json.getFcNodes())
+                }
+                declaration.getAnnotationsByType(KspBridgeNav::class).forEach { annotation ->
+                    navNodes.addAll(annotation.json.getNavNode())
+                }
             }
-            declaration.getAnnotationsByType(KspBridgeCf::class).forEach { annotation ->
-                cfNodes.addAll(annotation.json.getFcNodes())
-            }
-            declaration.getAnnotationsByType(KspBridgeNav::class).forEach { annotation ->
-                navNodes.addAll(annotation.json.getNavNode())
-            }
+        }catch (e: Exception){
+            log("bridge working====> ${e.message}")
         }
         log("bridge working: ${resolver.getModuleName().asString()} ===>收集完毕")
         return emptyList()
@@ -51,6 +56,7 @@ class AppKspProcessor(
         val isApplication = options["bridgeEntry"] == "true"
         if (isApplication && !finalGenerated) {
 
+            log("收集前的个数：${serviceNodes.size} services, ${cfNodes.size} cfs")
             // 保证输出稳定（顺序 + 去重）
             val stableServices = serviceNodes
                 .distinctBy { it.key }
@@ -65,6 +71,8 @@ class AppKspProcessor(
                 csService = stableServices,
                 fcList = stableCfs
             ).create()
+
+            log("去重后稳定个数：${stableServices.size} services, ${stableCfs.size} cfs")
 
             finalGenerated = true
         }
