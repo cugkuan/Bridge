@@ -21,7 +21,7 @@ class CreateInitTransfer(
         )
             .use { stream ->
                 with(stream) {
-                    appendText("package ${top.brightk.bridge.process.CS_TRANSFER_PACKET}")
+                    appendText("package $CS_TRANSFER_PACKET")
                     newLine(2)
                     appendText("import ${top.brightk.bridge.annotation.KspBridgeInit::class.java.name}")
                     newLine(2)

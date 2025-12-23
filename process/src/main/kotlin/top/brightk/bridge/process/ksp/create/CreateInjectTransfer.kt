@@ -17,7 +17,7 @@ class CreateInjectTransfer(
     fun create() {
         val className = getCreateName()
         codeGenerator.createNewFile(
-            Dependencies(true),
+            Dependencies(false),
             CS_TRANSFER_PACKET, className, "kt"
         )
             .use { stream ->

@@ -41,14 +41,10 @@ const val NAV_URL_BRIDGE = "top.brightk.bridge.annotation.KspBridgeNav"
 class KspProcessor(environment: SymbolProcessorEnvironment) :
     BaseProcessor(environment) {
     private var isScan: Boolean = true
-    private var isFinish = false
-    private var navInject = false
-
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
         val application = options["bridgeEntry"]
-
         val processAnnotated = ArrayList<KSAnnotated>()
         if (isScan) {
             // 处理 Init，因为Ksp 的工作原理决定的
@@ -100,7 +96,7 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
                 .also {
                     processAnnotated.addAll(it.toList())
                 }
-            log("CsService: ${CsUrl::class.java.name}${ksAnnotated.toList().size}")
+            log("CsService: ${CsUrl::class.java.name} ==> ${ksAnnotated.toList().size}")
             ksAnnotated.forEach {
                 it.accept(csServiceVisitor, Unit)
             }
@@ -153,47 +149,9 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
             isScan = false
             return processAnnotated
         }
-
-        if (application == "true" && !isFinish) {
-            val csFinalServices = ArrayList<CsServiceNode>()
-            val cfList = ArrayList<CfNode>()
-            val navList = ArrayList<NavNode>()
-            resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
-                declaration.getAnnotationsByType(KspBridgeService::class).forEach { node ->
-                    val json = node.json
-                    csFinalServices.addAll(json.getServiceNodes())
-                }
-                declaration.getAnnotationsByType(KspBridgeCf::class).forEach { node ->
-                    val json = node.json
-                    cfList.addAll(json.getFcNodes())
-                }
-
-                declaration.getAnnotationsByType(KspBridgeNav::class).forEach { node ->
-                    val json = node.json
-                    navList.addAll(json.getNavNode())
-                }
-            }
-            log("一共有${csFinalServices.size}个CsService ${cfList.size}个FcUrl方法")
-            CreateFinalTransfer(codeGenerator, csFinalServices, cfList)
-                .create()
-
-            isFinish = true
-        }
-        if (options["navInject"] == "true" && !navInject){
-            val navList = ArrayList<NavNode>()
-            resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
-                declaration.getAnnotationsByType(KspBridgeNav::class).forEach { node ->
-                    val json = node.json
-                    navList.addAll(json.getNavNode())
-                }
-            }
-            if (navList.isNotEmpty()) {
-                CreateFinalNavTransfer(codeGenerator, navList).create()
-            }
-            navInject = true
-        }
         return emptyList()
     }
+
 
     override fun finish() {
         super.finish()
