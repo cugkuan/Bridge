@@ -17,7 +17,7 @@ class CreateFinalNavTransfer(
 
     fun create() {
         codeGenerator.createNewFile(
-            Dependencies.ALL_FILES,
+            Dependencies(true),
             CS_TRANSFER_FINIAL, CS_TRANSFER_FINIAL_NAV_CLASS, "kt"
         )
             .use { stream ->

@@ -24,7 +24,7 @@ import top.brightk.bridge.process.ksp.create.CreateNavTransfer
 
 const val CS_TRANSFER_FINIAL = "com.brightk.bridge"
 const val CS_TRANSFER_FINIAL_CLASS = "CsServiceInit"
-const val CS_TRANSFER_FINIAL_NAV_CLASS ="NavBridgeInit"
+const val CS_TRANSFER_FINIAL_NAV_CLASS = "NavBridgeInit"
 const val CS_TRANSFER_PACKET = "com.brightk.bridge.transfer"
 
 const val NAV_INJECT = "top.brightk.bridge.annotation.NavGraphInject"
@@ -41,6 +41,7 @@ const val NAV_URL_BRIDGE = "top.brightk.bridge.annotation.KspBridgeNav"
 class KspProcessor(environment: SymbolProcessorEnvironment) :
     BaseProcessor(environment) {
     private var isScan: Boolean = true
+
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
@@ -92,56 +93,54 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
             // 处理Cs服务
             val csServices = ArrayList<CsServiceNode>()
             val csServiceVisitor = CsServiceVisitor(this, csServices)
-            val ksAnnotated = resolver.getSymbolsWithAnnotation(CsUrl::class.java.name)
+            resolver.getSymbolsWithAnnotation(CsUrl::class.java.name)
                 .also {
                     processAnnotated.addAll(it.toList())
+                }.forEach {
+                    it.accept(csServiceVisitor, Unit)
                 }
-            log("CsService: ${CsUrl::class.java.name} ==> ${ksAnnotated.toList().size}")
-            ksAnnotated.forEach {
-                it.accept(csServiceVisitor, Unit)
-            }
             if (csServices.isNotEmpty()) {
                 CreateCsTransfer(codeGenerator, csServices)
                     .create()
             }
             // 处理函数
             val fcList = ArrayList<CfNode>()
-            val fcAnnotated = resolver.getSymbolsWithAnnotation(CfUrl::class.java.name)
+            resolver.getSymbolsWithAnnotation(CfUrl::class.java.name)
                 .also {
                     processAnnotated.addAll(it.toList())
                 }
                 .filterIsInstance<KSFunctionDeclaration>()
-            fcAnnotated.forEach { function ->
-                if (function.annotations.any { it.shortName.asString() == "Composable" }) {
-                    log("Cf", function.simpleName.asString())
-                    if (function.parameters.size > 1) {
-                        error("最多一个参数，且参数的类型为 CfParams")
-                        throw IllegalArgumentException(" @FcUrl 方法最多一个参数")
-                    }
-                    if (function.parameters.isNotEmpty()) {
-                        val parameter = function.parameters.first()
-                        val parameterType = parameter.type.resolve().declaration.qualifiedName
-                        if (parameterType?.asString() == "top.brightk.bridge.core.CfParams") {
+                .forEach { function ->
+                    if (function.annotations.any { it.shortName.asString() == "Composable" }) {
+                        log("Cf", function.simpleName.asString())
+                        if (function.parameters.size > 1) {
+                            error("最多一个参数，且参数的类型为 CfParams")
+                            throw IllegalArgumentException(" @FcUrl 方法最多一个参数")
+                        }
+                        if (function.parameters.isNotEmpty()) {
+                            val parameter = function.parameters.first()
+                            val parameterType = parameter.type.resolve().declaration.qualifiedName
+                            if (parameterType?.asString() == "top.brightk.bridge.core.CfParams") {
+                                val fcName = function.qualifiedName?.asString()
+                                val cfUrl = function.getAnnotationsByType(CfUrl::class).first().uri
+                                log("Cf", function.qualifiedName?.asString().orEmpty())
+                                fcList.add(CfNode(fcName!!, cfUrl.toKey(), true))
+                            } else {
+                                error("参数类型只能是CfParams")
+                                throw IllegalArgumentException("@CfUrl 修饰的方法，参数类型只能是 CfParams")
+                            }
+                        } else {
+                            // 没有参数
                             val fcName = function.qualifiedName?.asString()
                             val cfUrl = function.getAnnotationsByType(CfUrl::class).first().uri
-                            log("Cf", function.qualifiedName?.asString().orEmpty())
-                            fcList.add(CfNode(fcName!!, cfUrl.toKey(), true))
-                        } else {
-                            error("参数类型只能是CfParams")
-                            throw IllegalArgumentException("@CfUrl 修饰的方法，参数类型只能是 CfParams")
+                            log("Fc", function.qualifiedName?.asString().orEmpty())
+                            fcList.add(CfNode(fcName!!, cfUrl.toKey(), false))
                         }
-                    } else {
-                        // 没有参数
-                        val fcName = function.qualifiedName?.asString()
-                        val cfUrl = function.getAnnotationsByType(CfUrl::class).first().uri
-                        log("Fc", function.qualifiedName?.asString().orEmpty())
-                        fcList.add(CfNode(fcName!!, cfUrl.toKey(), false))
-                    }
 
-                } else {
-                    error("${function.simpleName.asString()}没有被@Composable修饰")
+                    } else {
+                        error("${function.simpleName.asString()}没有被@Composable修饰")
+                    }
                 }
-            }
             if (fcList.isNotEmpty()) {
                 CreateFcTransfer(codeGenerator, fcList).create()
             }

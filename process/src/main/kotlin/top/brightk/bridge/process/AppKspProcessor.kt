@@ -11,6 +11,9 @@ import top.brightk.bridge.annotation.KspBridgeService
 import top.brightk.bridge.process.ksp.create.CreateFinalNavTransfer
 import top.brightk.bridge.process.ksp.create.CreateFinalTransfer
 
+const val SERVICE_QUALIFIER = "top.brightk.bridge.annotation.KspBridgeService"
+const val CF_QUALIFIER = "top.brightk.bridge.annotation.KspBridgeCf"
+const val NAV_QUALIFIER = "top.brightk.bridge.annotation.KspBridgeNav"
 class AppKspProcessor(
     environment: SymbolProcessorEnvironment
 ) : BaseProcessor(environment) {
@@ -26,22 +29,32 @@ class AppKspProcessor(
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge working: ${resolver.getModuleName().asString()}")
-        // 只做“收集”，不生成任何文件
-        try {
-
-            resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
-                declaration.getAnnotationsByType(KspBridgeService::class).forEach { annotation ->
-                    serviceNodes.addAll(annotation.json.getServiceNodes())
-                }
-                declaration.getAnnotationsByType(KspBridgeCf::class).forEach { annotation ->
-                    cfNodes.addAll(annotation.json.getFcNodes())
-                }
-                declaration.getAnnotationsByType(KspBridgeNav::class).forEach { annotation ->
-                    navNodes.addAll(annotation.json.getNavNode())
+        val isApplication = options["bridgeEntry"] == "true"
+        if (!isApplication){
+            return emptyList()
+        }
+        resolver.getDeclarationsFromPackage(CS_TRANSFER_PACKET).forEach { declaration ->
+            declaration.annotations.forEach { annotation ->
+                // 解析注解的全限定名
+                val qualifiedName = annotation.annotationType.resolve().declaration.qualifiedName?.asString()
+                // 4. 提取名为 "json" 的参数值（关键：直接从符号参数列表中取值）
+                val jsonValue = annotation.arguments
+                    .find { it.name?.asString() == "json" }
+                    ?.value as? String
+                if (!jsonValue.isNullOrBlank()) {
+                    log("bride work : $jsonValue ===>$qualifiedName")
+                    try {
+                        // 5. 根据当前处理的注解名，分发解析逻辑
+                        when (qualifiedName) {
+                            SERVICE_QUALIFIER -> serviceNodes.addAll(jsonValue.getServiceNodes())
+                            CF_QUALIFIER -> cfNodes.addAll(jsonValue.getFcNodes())
+                            NAV_QUALIFIER -> navNodes.addAll(jsonValue.getNavNode())
+                        }
+                    } catch (e: Exception) {
+                        error("解析 $jsonValue 失败")
+                    }
                 }
             }
-        }catch (e: Exception){
-            log("bridge working====> ${e.message}")
         }
         log("bridge working: ${resolver.getModuleName().asString()} ===>收集完毕")
         return emptyList()
@@ -52,27 +65,20 @@ class AppKspProcessor(
      */
     override fun finish() {
         super.finish()
-
         val isApplication = options["bridgeEntry"] == "true"
         if (isApplication && !finalGenerated) {
-
-            log("收集前的个数：${serviceNodes.size} services, ${cfNodes.size} cfs")
             // 保证输出稳定（顺序 + 去重）
             val stableServices = serviceNodes
                 .distinctBy { it.key }
 
             val stableCfs = cfNodes
                 .distinctBy { it.key }
-
             log("FinalTransfer generate: ${stableServices.size} services, ${stableCfs.size} cfs")
-
             CreateFinalTransfer(
                 codeGenerator = codeGenerator,
                 csService = stableServices,
                 fcList = stableCfs
             ).create()
-
-            log("去重后稳定个数：${stableServices.size} services, ${stableCfs.size} cfs")
 
             finalGenerated = true
         }
