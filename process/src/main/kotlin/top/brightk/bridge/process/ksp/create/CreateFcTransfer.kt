@@ -14,7 +14,7 @@ class CreateFcTransfer(
     private val fcList: List<CfNode>,
 ) : BaseTransfer() {
     fun create() {
-        val className = "Fc_${innerModuleName}_${fcList.size}"
+        val className = "Cs_Cf_${innerModuleName}"
         codeGenerator.createNewFile(Dependencies(false), CS_TRANSFER_PACKET, className, "kt")
             .use { stream ->
                 with(stream) {

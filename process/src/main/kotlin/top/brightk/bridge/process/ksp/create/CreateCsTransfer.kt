@@ -14,7 +14,7 @@ class CreateCsTransfer(
     private val csService: List<CsServiceNode>,
 ) : BaseTransfer() {
     fun create() {
-        val className = "Service_${innerModuleName}_${csService.size}"
+        val className = "Cs_Service${innerModuleName}"
         codeGenerator.createNewFile(Dependencies(false), CS_TRANSFER_PACKET, className, "kt")
             .use { stream ->
                 with(stream) {
