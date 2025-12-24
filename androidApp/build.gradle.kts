@@ -8,6 +8,7 @@ plugins {
 ksp{
     arg("application","true")
     arg("navInject","true")
+    arg("bridgeEntry","true")
 }
 android {
     namespace = "com.bridge.android"
