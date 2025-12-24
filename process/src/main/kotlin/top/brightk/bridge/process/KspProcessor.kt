@@ -45,6 +45,13 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         log("bridge正在工作：${resolver.getModuleName().asString()}")
+
+        val internalModuleName = resolver.getModuleName().asString()
+            .replace("-", "_")
+            .replace(".", "_")
+
+// 结合全限定名哈希，确保绝对唯一且支持 iOS
+
         val application = options["bridgeEntry"]
         val processAnnotated = ArrayList<KSAnnotated>()
         if (isScan) {
@@ -100,10 +107,11 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
                     it.accept(csServiceVisitor, Unit)
                 }
             if (csServices.isNotEmpty()) {
-                CreateCsTransfer(codeGenerator, csServices)
+                CreateCsTransfer(internalModuleName,codeGenerator, csServices)
                     .create()
             }
-            // 处理函数
+
+            // Fc   Compose 函数的处理规则
             val fcList = ArrayList<CfNode>()
             resolver.getSymbolsWithAnnotation(CfUrl::class.java.name)
                 .also {
@@ -142,7 +150,7 @@ class KspProcessor(environment: SymbolProcessorEnvironment) :
                     }
                 }
             if (fcList.isNotEmpty()) {
-                CreateFcTransfer(codeGenerator, fcList).create()
+                CreateFcTransfer(internalModuleName,codeGenerator, fcList).create()
             }
 
             isScan = false

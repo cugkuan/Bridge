@@ -9,11 +9,12 @@ import top.brightk.bridge.process.toTransitContentJson
 
 
 class CreateFcTransfer(
+    private val innerModuleName: String,
     private val codeGenerator: CodeGenerator,
     private val fcList: List<CfNode>,
 ) : BaseTransfer() {
     fun create() {
-        val className = getCreateName()
+        val className = "Fc_${innerModuleName}"
         codeGenerator.createNewFile(Dependencies(false), CS_TRANSFER_PACKET, className, "kt")
             .use { stream ->
                 with(stream) {

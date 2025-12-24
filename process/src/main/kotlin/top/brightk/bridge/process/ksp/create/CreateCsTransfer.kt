@@ -9,11 +9,12 @@ import top.brightk.bridge.process.toTransitContentJson
 
 
 class CreateCsTransfer(
+    private val innerModuleName: String,
     private val codeGenerator: CodeGenerator,
     private val csService: List<CsServiceNode>,
 ) : BaseTransfer() {
     fun create() {
-        val className = getCreateName()
+        val className = "Service_${innerModuleName}"
         codeGenerator.createNewFile(Dependencies(false), CS_TRANSFER_PACKET, className, "kt")
             .use { stream ->
                 with(stream) {
