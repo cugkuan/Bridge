@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
-import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -26,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "feature1"
+            baseName = "shared"
             isStatic = true
         }
     }
@@ -75,5 +73,6 @@ dependencies{
 }
 
 ksp {
+    arg("navInject","true")
     arg("bridgeEntry","true")
 }

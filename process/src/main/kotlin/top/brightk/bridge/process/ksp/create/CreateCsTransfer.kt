@@ -5,6 +5,7 @@ import com.google.devtools.ksp.processing.Dependencies
 import top.brightk.bridge.annotation.KspBridgeService
 import top.brightk.bridge.process.CS_TRANSFER_PACKET
 import top.brightk.bridge.process.CsServiceNode
+import top.brightk.bridge.process.md5
 import top.brightk.bridge.process.toTransitContentJson
 
 
@@ -28,7 +29,7 @@ class CreateCsTransfer(
                         val json = csService.toTransitContentJson()
                         appendText("@KspBridgeService(json = \"${json}\")")
                         newLine(1)
-                        appendText("val csService:String? = null")
+                        appendText("val service_${json.md5()}:String? = null")
                         newLine(2)
                     }
 

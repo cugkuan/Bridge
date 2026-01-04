@@ -7,6 +7,7 @@ import top.brightk.bridge.process.CS_TRANSFER_PACKET
 import top.brightk.bridge.process.CfNode
 import top.brightk.bridge.process.NAV_URL_BRIDGE
 import top.brightk.bridge.process.NavNode
+import top.brightk.bridge.process.md5
 import top.brightk.bridge.process.toTransitContentJson
 
 
@@ -28,7 +29,7 @@ class CreateNavTransfer(
                         val json = fcList.toTransitContentJson()
                         appendText("@KspBridgeNav(json = \"${json}\")")
                         newLine(1)
-                        appendText("val navConfig:String? = null")
+                        appendText("val ${json.md5()}:String? = null")
                         newLine(2)
                     }
 

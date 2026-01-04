@@ -5,6 +5,7 @@ import com.google.devtools.ksp.processing.Dependencies
 import top.brightk.bridge.annotation.KspBridgeCf
 import top.brightk.bridge.process.CS_TRANSFER_PACKET
 import top.brightk.bridge.process.CfNode
+import top.brightk.bridge.process.md5
 import top.brightk.bridge.process.toTransitContentJson
 
 
@@ -27,7 +28,7 @@ class CreateFcTransfer(
                         val json = fcList.toTransitContentJson()
                         appendText("@KspBridgeCf(json = \"${json}\")")
                         newLine(1)
-                        appendText("val fc:String? = null")
+                        appendText("val fc_${json.md5()}:String? = null")
                         newLine(2)
                     }
 
