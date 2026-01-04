@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import top.brightk.bridge.core.CfParams
 import top.brightk.bridge.core.CsRequest
 import top.brightk.bridge.core.UriRespond
+import top.brightk.bridge.core.cf.CfManger
 
 const val CS_CODE_SUCCEED = 200
 /**
@@ -46,6 +47,8 @@ fun KtUrl.toKey():String{
 }
 fun String.toKtUrl() = getUrl(this)
 object Bridge {
+
+    var isDebug = false
     fun init(){
     }
     fun call(request: CsRequest): UriRespond {
@@ -56,4 +59,10 @@ object Bridge {
         callFunction(params)
     }
 
+    fun debug(isDebug: Boolean){
+        this.isDebug = isDebug
+    }
+    fun debugPrint(){
+        CfManger.debugPrint()
+    }
 }

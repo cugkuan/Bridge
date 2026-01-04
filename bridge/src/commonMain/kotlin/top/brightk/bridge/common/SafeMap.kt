@@ -6,4 +6,5 @@ expect class  SafeMap<K,V>(){
     fun remove(key: K):V?
 
     fun getMap():Map<K,V>
+
 }

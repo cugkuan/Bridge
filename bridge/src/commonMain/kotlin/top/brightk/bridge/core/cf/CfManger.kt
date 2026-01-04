@@ -13,6 +13,17 @@ object CfManger {
        register(url.toKtUrl().toKey(),f)
     }
 
+    fun debugPrint(){
+        if (cfConfig.getMap().isEmpty()){
+            println("Bridge Debug cf is empty")
+        }else{
+            println("Bridge Debug cf")
+            cfConfig.getMap().forEach { mapEntry ->
+                println("Bridge Debug cf key: ${mapEntry.key} value: ${mapEntry.value}")
+            }
+        }
+    }
+
     fun register(key: String, f:@Composable (request:CfParams)->Unit){
         cfConfig.put(key, f)
     }
