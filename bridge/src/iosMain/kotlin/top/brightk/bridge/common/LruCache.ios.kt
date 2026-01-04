@@ -1,20 +1,31 @@
-
-
 import platform.Foundation.NSCache
 
-class IosLruCache<K,V>(maxSize:Int,create:(key:K)->V?) : LruCache<K, V>(maxSize,create) {
-    private val cache = NSCache().apply {
-        countLimit = maxSize.toLong().toULong()
+class IosLruCache<K, V>(maxSize: Int, create: (key: K) -> V?) : LruCache<K, V>(maxSize, create) {
+    private val nsCache = NSCache().apply {
+        countLimit = maxSize.toULong()
     }
+
     override fun get(key: K): V? {
-        var  value = cache.objectForKey(key)
-        if (value == null){
-            value = create(key)
-            cache.setObject(value,key)
+        val cachedValue = nsCache.objectForKey(key) as? V
+        if (cachedValue != null) {
+            return cachedValue
         }
-        return  value as? V
+        val newValue = create(key)
+        if (newValue != null) {
+            nsCache.setObject(newValue, forKey = key)
+        }
+        return newValue
+    }
+
+    fun put(key: K, value: V) {
+        nsCache.setObject(value, forKey = key)
+    }
+
+    fun remove(key: K) {
+        nsCache.removeObjectForKey(key)
     }
 }
+
 actual fun <K, V> createLruCache(maxSize: Int, create: (key: K) -> V?): LruCache<K, V> {
-    return  IosLruCache<K,V>(maxSize,create)
+    return IosLruCache<K, V>(maxSize, create)
 }
