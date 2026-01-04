@@ -29,7 +29,7 @@ class CreateNavTransfer(
                         val json = fcList.toTransitContentJson()
                         appendText("@KspBridgeNav(json = \"${json}\")")
                         newLine(1)
-                        appendText("val ${json.md5()}:String? = null")
+                        appendText("val navConfig_${json.md5()}:String? = null")
                         newLine(2)
                     }
 

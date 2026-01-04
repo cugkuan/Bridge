@@ -48,8 +48,8 @@ fun NavGraphBuilder.navFeature(controller: NavHostController) {
             },
         )
     ) {
-        val text = it.arguments?.getString("text")
-        FeatureScreen(controller, text)
+       // val text = it.arguments?.getString("text")
+        FeatureScreen(controller, "text")
     }
 }
 
