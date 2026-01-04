@@ -59,3 +59,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-mu
 publish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
