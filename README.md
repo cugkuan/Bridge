@@ -1,46 +1,35 @@
 
 # 概述
 
-Bridge 是一个 kmp(kotlin multiplatform) 轻量级组件库。支持跨组件 @Compose 方法调用和基础的组件通信。
+Bridge 是一个 kmp(kotlin multiplatform) 轻量级组件库。支持跨组件 @Compose 方法调用和基础的组件通信。已经验证在iOS环境中能正常工作。
 
 # 基本使用
 
 
-在主module 中
-
+在项目级别的 build.gradle.kts 中配置插件
 
 ```kt
 
 plugins {
-    alias(libs.plugins.ksp)
+    id("top.brightk.bridge") version '0.1.0' appply false 
 }
-
-ksp{
-    arg("application","true")
-}
-
-// 库依赖
-implementation("top.brightk:bridge:0.0.2")
-
-// ksp 依赖
-compileOnly("top.brightk:bridge-ksp:0.0.1")
-ksp("top.brightk:bridge-ksp:0.0.1")
-// kcp 依赖
-add("kotlinCompilerPluginClasspath", "top.brightk:bridge-kcp")
 
 ```
-对于 kmp 模块，依赖如下
+在入口模块中使用插件
 
 ```kt
 
-    implementation("top.brightk:bridge:0.0.2")
-    val ksp = "top.brightk:bridge-ksp:0.0.2"
-    add("kspCommonMainMetadata",ksp)
-    add("kspAndroid",ksp)
-    add("kspIosX64",ksp)
-    add("kspIosArm64",ksp)
-    add("kspIosSimulatorArm64",ksp)
+plugins {
+    id("top.brightk.bridge")
+}
+
+// 标明这个是主模块
+ksp {
+    arg("bridgeEntry","true")
+}
+
 ```
+
 具体的可以参考demo中依赖配置
 
 ## @Compose 跨组件方法调用
