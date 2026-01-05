@@ -85,5 +85,6 @@ class NavInjectMethodTransformer(
             putValueArgument(0,irBuilder.irGet(declaration.valueParameters[0]))
         }
         (body as IrBlockBody).statements.add(0, initCall)
+        logger.log("Init  方法注入成功")
     }
 }

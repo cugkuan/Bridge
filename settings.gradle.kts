@@ -11,6 +11,8 @@ pluginManagement {
             url = uri("https://jitpack.io")
         }
     }
+
+    includeBuild("process-gradle-plugin")
 }
 
 @Suppress("UnstableApiUsage")
@@ -34,6 +36,9 @@ rootProject.name = "BridgeApp"
 include(":androidApp")
 include(":bridge")
 include(":process")
+include(":process-kcp")
+//include(":process-gradle-plugin")
 include(":Feature:feature1")
 include(":Feature:feature2")
 include(":shared")
+

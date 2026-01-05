@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    id("top.brightk.bridge")
 }
 
 ksp{
@@ -69,6 +70,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.navigation.compose)
 
-    kotlinCompilerPluginClasspath(projects.process)
+    kotlinCompilerPluginClasspath(projects.processKcp)
     ksp(projects.process)
 }

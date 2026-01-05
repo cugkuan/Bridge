@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.composeMultiplatform)
+    id("top.brightk.bridge")
 }
 kotlin {
     androidTarget {
@@ -24,7 +25,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = ""
             isStatic = true
         }
     }
@@ -70,6 +71,12 @@ dependencies{
     add("kspIosX64",ksp)
     add("kspIosArm64",ksp)
     add("kspIosSimulatorArm64",ksp)
+
+
+    
+    configurations.matching { it.name.contains("kotlinCompilerPluginClasspath") }.configureEach {
+        project.dependencies.add(this.name, project(":process-kcp"))
+    }
 }
 
 ksp {

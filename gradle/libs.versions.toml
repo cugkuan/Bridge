@@ -35,6 +35,10 @@ androidx-runner = { group = "androidx.test", name = "runner", version.ref = "run
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "symbolProcessingApi" }
+gradle-processing = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin" ,version = "2.0.0"}
+gradle-processing-api = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api",version = "2.0.0"}
+kcp-native = {module = "org.jetbrains.kotlin:kotlin-backend-native",version  ="2.2.0"}
+
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
