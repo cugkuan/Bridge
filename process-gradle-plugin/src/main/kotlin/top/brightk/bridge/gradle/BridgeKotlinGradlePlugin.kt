@@ -15,7 +15,7 @@ class BridgeKotlinGradlePlugin : KotlinCompilerPluginSupportPlugin {
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = "top.brightk",
         artifactId = "bridge-kcp", // 必须对应你那个包含 BridgePluginRegistrar 的模块名
-        version = "0.1.0"          // 对应你的插件版本
+        version = "0.1.2"          // 对应你的插件版本
     )
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
         return true
