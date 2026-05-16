@@ -17,7 +17,7 @@ class Feature2Service :CsService {
 @CsUrl("bridge://app/feature2/test2")
 class Feature3Service:CsService {
     override fun call(request: CsRequest): UriRespond {
-        val count:Int = request.getIntParam("count")
+        val count:Int = request.getIntParam("count")?:0
         return Succeed(count+1)
     }
 }
