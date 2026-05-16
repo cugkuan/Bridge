@@ -25,14 +25,13 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = ""
+            baseName = "shared"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(kotlin("reflect"))
             implementation(libs.kotlin.reflect)
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -63,7 +62,7 @@ android {
     }
 }
 dependencies{
-    implementation(libs.androidx.runtime.android)
+    // implementation(libs.androidx.runtime.android)
     // implementation(libs.bridge.lib)
     val ksp = projects.process
     add("kspCommonMainMetadata",ksp)

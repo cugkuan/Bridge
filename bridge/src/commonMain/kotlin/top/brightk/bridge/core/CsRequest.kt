@@ -74,19 +74,19 @@ class CsRequest(val url: String, context: Any? = null) {
     }
 
     fun getStringParam(key: String): String? {
-        return getParam<String>(String::class, key)!!
+        return getParam<String>(String::class, key)
     }
 
-    fun getIntParam(key: String): Int {
-        return getParam<Int>(Int::class, key)!!
+    fun getIntParam(key: String): Int? {
+        return getParam<Int>(Int::class, key)
     }
 
-    fun getLongParam(key: String): Long {
-        return getParam<Long>(Long::class, key)!!
+    fun getLongParam(key: String): Long? {
+        return getParam<Long>(Long::class, key)
     }
 
-    fun getBooleanParam(key: String): Boolean {
-        return getParam<Boolean>(Boolean::class, key)!!
+    fun getBooleanParam(key: String): Boolean? {
+        return getParam<Boolean>(Boolean::class, key)
     }
 
     fun getParam(key: String): Any? {
