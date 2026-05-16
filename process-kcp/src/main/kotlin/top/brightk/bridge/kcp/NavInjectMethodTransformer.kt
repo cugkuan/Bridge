@@ -1,6 +1,5 @@
 package top.brightk.bridge.kcp
 
-import org.jetbrains.kotlin.DeprecatedForRemovalCompilerApi
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.ir.IrStatement
@@ -28,7 +27,6 @@ class NavInjectMethodTransformer(
     private val logger: Logger
 ) : IrElementTransformerVoid() {
 
-    @OptIn(DeprecatedForRemovalCompilerApi::class)
     override fun visitFunction(declaration: IrFunction): IrStatement {
         if (!declaration.hasAnnotation(FqName("top.brightk.bridge.annotation.NavGraphInject"))) {
             return super.visitFunction(declaration)
@@ -58,7 +56,6 @@ class NavInjectMethodTransformer(
     /**
      * 扩展函数
      */
-    @OptIn(DeprecatedForRemovalCompilerApi::class)
     private fun injectNavInitCall(declaration: IrFunction, navInitSymbol: IrSimpleFunctionSymbol) {
         val body = declaration.body ?: run {
             val newBody = pluginContext.irFactory.createBlockBody(
