@@ -19,35 +19,43 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "feature1"
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(libs.navigation.compose)
+                implementation(projects.bridge)
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(libs.kotlin.reflect)
+            }
+        }
+
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
+    }
+
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().configureEach {
+        binaries.framework {
+            baseName = "feature2"
             isStatic = true
         }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(kotlin("reflect"))
-            implementation(libs.kotlin.reflect)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(libs.navigation.compose)
-            implementation(projects.bridge)
-
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
 }
+
 android {
     namespace = "top.brightk.feature2"
     compileSdk = 35
@@ -59,13 +67,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-dependencies{
-    //implementation(libs.bridge.lib)
-    val ksp = projects.process
-    add("kspCommonMainMetadata",ksp)
-    add("kspAndroid",ksp)
-    add("kspIosX64",ksp)
-    add("kspIosArm64",ksp)
-    add("kspIosSimulatorArm64",ksp)
-}
 
+dependencies {
+    val ksp = projects.process
+    add("kspCommonMainMetadata", ksp)
+    add("kspAndroid", ksp)
+    add("kspIosArm64", ksp)
+    add("kspIosSimulatorArm64", ksp)
+}

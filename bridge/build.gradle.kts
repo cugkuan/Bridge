@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.publish)
 }
+
 kotlin {
     androidTarget {
         compilations.all {
@@ -21,32 +22,25 @@ kotlin {
         publishLibraryVariants("release")
         publishLibraryVariantsGroupedByFlavor = true
     }
-    iosX64()
+    
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.kotlin.reflect)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
             }
         }
         androidMain {
-            dependencies {}
-        }
-        iosX64Main {
-            dependencies {}
-        }
-        iosArm64Main {
-            dependencies {}
-        }
-        iosSimulatorArm64Main {
-            dependencies {}
+            dependencies {
+                implementation(libs.kotlin.reflect)
+            }
         }
     }
 }
+
 android {
     namespace = "top.brightk.bridge"
     compileSdk = 35
@@ -67,7 +61,7 @@ android {
 }
 
 group = "top.brightk"
-version = "0.1.0"
+version = "0.1.4"
 
 mavenPublishing {
     coordinates("top.brightk", "bridge", project.version.toString())
@@ -104,6 +98,3 @@ mavenPublishing {
         }
     }
 }
-
-
-

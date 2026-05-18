@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     id("top.brightk.bridge")
 }
+
 kotlin {
     androidTarget {
         compilations.all {
@@ -19,37 +20,47 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.navigation.compose)
+                implementation(projects.bridge)
+                implementation(project(":Feature:feature1"))
+                implementation(project(":Feature:feature2"))
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.kotlin.reflect)
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
+    }
+
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().configureEach {
+        binaries.framework {
             baseName = "shared"
             isStatic = true
         }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlin.reflect)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.navigation.compose)
-            implementation(projects.bridge)
-            implementation(project(":Feature:feature1"))
-            implementation(project(":Feature:feature2"))
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
 }
+
 android {
     namespace = "top.brightk.shared"
     compileSdk = 35
@@ -61,24 +72,20 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-dependencies{
-    // implementation(libs.androidx.runtime.android)
-    // implementation(libs.bridge.lib)
+
+dependencies {
     val ksp = projects.process
-    add("kspCommonMainMetadata",ksp)
-    add("kspAndroid",ksp)
-    add("kspIosX64",ksp)
-    add("kspIosArm64",ksp)
-    add("kspIosSimulatorArm64",ksp)
+    add("kspCommonMainMetadata", ksp)
+    add("kspAndroid", ksp)
+    add("kspIosArm64", ksp)
+    add("kspIosSimulatorArm64", ksp)
 
-
-    
     configurations.matching { it.name.contains("kotlinCompilerPluginClasspath") }.configureEach {
         project.dependencies.add(this.name, project(":process-kcp"))
     }
 }
 
 ksp {
-    arg("navInject","true")
-    arg("bridgeEntry","true")
+    arg("navInject", "true")
+    arg("bridgeEntry", "true")
 }

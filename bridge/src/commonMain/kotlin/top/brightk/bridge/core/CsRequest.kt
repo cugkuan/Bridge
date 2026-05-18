@@ -5,7 +5,6 @@ import top.brightk.bridge.common.WeakReference
 import top.brightk.bridge.getUrl
 import top.brightk.bridge.toKey
 import kotlin.reflect.KClass
-import kotlin.reflect.cast
 
 const val REQUEST_PARAMS_KEY_ACTION: String = "uri_request_key_action"
 const val REQUEST_PARAMS_DEFAULT_DATA: String = "uri_request_default_data"
@@ -96,7 +95,8 @@ class CsRequest(val url: String, context: Any? = null) {
     fun <T : Any> getParam(clazz: KClass<T>, key: String): T? {
         return  params?.get(key)?.let { field ->
             if (clazz.isInstance(field)) {
-                clazz.cast(field)
+                @Suppress("UNCHECKED_CAST")
+                field as? T
             } else {
                 null
             }

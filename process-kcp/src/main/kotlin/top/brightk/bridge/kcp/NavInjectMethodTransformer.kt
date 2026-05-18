@@ -5,11 +5,12 @@ import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.irGet
+import org.jetbrains.kotlin.ir.builders.irCall
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.createBlockBody
+import org.jetbrains.kotlin.ir.declarations.IrParameterKind
+import org.jetbrains.kotlin.ir.symbols.UnsafeDuringIrConstructionAPI
 import org.jetbrains.kotlin.ir.expressions.IrBlockBody
-import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
-import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.types.classFqName
 import org.jetbrains.kotlin.ir.util.hasAnnotation
@@ -19,9 +20,6 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.util.Logger
 
-/**
- * 这个的难点是如何向 扩展函数中插入 方法
- */
 class NavInjectMethodTransformer(
     private val pluginContext: IrPluginContext,
     private val logger: Logger
@@ -31,11 +29,12 @@ class NavInjectMethodTransformer(
         if (!declaration.hasAnnotation(FqName("top.brightk.bridge.annotation.NavGraphInject"))) {
             return super.visitFunction(declaration)
         }
-        if (declaration.valueParameters.isEmpty()){
+        val valueParameters = declaration.parameters.filter { it.kind == IrParameterKind.Regular }
+        if (valueParameters.isEmpty()){
             logger.error("${declaration.name}需要有NavHostController类型的参数")
             return  super.visitFunction(declaration)
         }
-        if (declaration.valueParameters.first().type.classFqName != FqName("androidx.navigation.NavHostController")){
+        if (valueParameters.first().type.classFqName != FqName("androidx.navigation.NavHostController")){
             logger.error("参数类型只能是androidx.navigation.NavHostController")
             return  super.visitFunction(declaration)
         }
@@ -53,9 +52,7 @@ class NavInjectMethodTransformer(
         return super.visitFunction(declaration)
     }
 
-    /**
-     * 扩展函数
-     */
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun injectNavInitCall(declaration: IrFunction, navInitSymbol: IrSimpleFunctionSymbol) {
         val body = declaration.body ?: run {
             val newBody = pluginContext.irFactory.createBlockBody(
@@ -67,19 +64,24 @@ class NavInjectMethodTransformer(
             newBody
         }
         val irBuilder = DeclarationIrBuilder(pluginContext, declaration.symbol)
-        // 使用正确的符号类型构建调用
-        val initCall = IrCallImpl(
-            startOffset = UNDEFINED_OFFSET,
-            endOffset = UNDEFINED_OFFSET,
-            type = navInitSymbol.owner.returnType,
-            symbol = navInitSymbol,
-            typeArgumentsCount = 0,
-            origin = IrStatementOrigin.SAFE_CALL
-        ).apply {
-            extensionReceiver = declaration.extensionReceiverParameter?.let {
-                irBuilder.irGet(it)
+        val initCall = irBuilder.irCall(navInitSymbol).apply {
+            val targetParams = navInitSymbol.owner.parameters
+            targetParams.forEachIndexed { index, param ->
+                when (param.kind) {
+                    IrParameterKind.ExtensionReceiver -> {
+                        this.arguments[index] = declaration.parameters.firstOrNull { it.kind == IrParameterKind.ExtensionReceiver }?.let {
+                            irBuilder.irGet(it)
+                        }
+                    }
+                    IrParameterKind.Regular -> {
+                        val valueParameters = declaration.parameters.filter { it.kind == IrParameterKind.Regular }
+                        if (valueParameters.isNotEmpty()) {
+                            this.arguments[index] = irBuilder.irGet(valueParameters[0])
+                        }
+                    }
+                    else -> {}
+                }
             }
-            putValueArgument(0,irBuilder.irGet(declaration.valueParameters[0]))
         }
         (body as IrBlockBody).statements.add(0, initCall)
         logger.log("Init  方法注入成功")
