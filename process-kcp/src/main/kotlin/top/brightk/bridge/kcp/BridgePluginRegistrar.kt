@@ -17,15 +17,14 @@ class BridgePluginRegistrar : CompilerPluginRegistrar() {
     override val pluginId: String = "bridge-compiler-plugin"
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
-        IrGenerationExtension.extensionPoint.registerExtension(BridgeIrGenerationExtension(configuration.getLogger()))
+        val logger = configuration.getLogger()
+        val irExtensionPoint = object : ProjectExtensionDescriptor<IrGenerationExtension>(
+            "org.jetbrains.kotlin.irGenerationExtension",
+            IrGenerationExtension::class.java
+        ) {}
+        irExtensionPoint.registerExtension(BridgeIrGenerationExtension(logger))
     }
 }
-
-private val IrGenerationExtension.Companion.extensionPoint: ProjectExtensionDescriptor<IrGenerationExtension>
-    get() = object : ProjectExtensionDescriptor<IrGenerationExtension>(
-        "org.jetbrains.kotlin.irGenerationExtension",
-        IrGenerationExtension::class.java
-    ) {}
 
 
 class BridgeIrGenerationExtension(val logger: Logger) : IrGenerationExtension {
