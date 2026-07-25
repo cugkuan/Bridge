@@ -20,7 +20,7 @@ kotlin {
     jvmToolchain(11) // 使用 JDK 11
 }
 group = "top.brightk"
-version = "0.2.1"
+version = "0.2.2"
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
