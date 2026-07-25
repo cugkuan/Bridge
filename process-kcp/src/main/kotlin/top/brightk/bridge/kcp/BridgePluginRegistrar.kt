@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.cli.common.messages.getLogger
 import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.extensions.ProjectExtensionDescriptor
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.util.Logger
 
@@ -16,9 +17,16 @@ class BridgePluginRegistrar : CompilerPluginRegistrar() {
     override val pluginId: String = "bridge-compiler-plugin"
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
-        IrGenerationExtension.registerExtension(BridgeIrGenerationExtension(configuration.getLogger()))
+        IrGenerationExtension.extensionPoint.registerExtension(BridgeIrGenerationExtension(configuration.getLogger()))
     }
 }
+
+private val IrGenerationExtension.Companion.extensionPoint: ProjectExtensionDescriptor<IrGenerationExtension>
+    get() = object : ProjectExtensionDescriptor<IrGenerationExtension>(
+        "org.jetbrains.kotlin.irGenerationExtension",
+        IrGenerationExtension::class.java
+    ) {}
+
 
 class BridgeIrGenerationExtension(val logger: Logger) : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
