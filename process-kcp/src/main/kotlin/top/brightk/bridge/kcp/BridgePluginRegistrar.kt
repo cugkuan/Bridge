@@ -17,7 +17,7 @@ class BridgePluginRegistrar : CompilerPluginRegistrar() {
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
         val logger = configuration.getLogger()
-        logger.warning("BridgeKcp Registrar version 0.2.5 starting...")
+        logger.warning("BridgeKcp Registrar version 0.2.7 starting...")
 
         // Standard K2 registration for IrGenerationExtension
         IrGenerationExtension.registerExtension(BridgeIrGenerationExtension(logger))
