@@ -1,0 +1,4 @@
+- [x] Upgrade KSP version in `libs.versions.toml`
+- [x] Verify KSP module compilation (Configuration successful for KSP 2.3.10)
+- [x] Verify KCP module compilation
+- [x] Create walkthrough
