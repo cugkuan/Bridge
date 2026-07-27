@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.cli.common.messages.getLogger
 import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.extensions.ProjectExtensionDescriptor
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.util.Logger
 
@@ -18,17 +17,10 @@ class BridgePluginRegistrar : CompilerPluginRegistrar() {
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
         val logger = configuration.getLogger()
+        logger.warning("BridgeKcp Registrar version 0.2.5 starting...")
 
-        // 彻底修复 ClassCastException:
-        // 在 Kotlin 2.4.x 中，IrGenerationExtension.Companion 不再继承自 ProjectExtensionDescriptor。
-        // 但 Native 等宿主环境运行时仍会尝试进行强制转换。
-        // 这里通过显式创建 ProjectExtensionDescriptor 匿名对象来保证二进制兼容性。
-        val irExtensionPoint = object : ProjectExtensionDescriptor<IrGenerationExtension>(
-            "org.jetbrains.kotlin.irGenerationExtension",
-            IrGenerationExtension::class.java
-        ) {}
-
-        irExtensionPoint.registerExtension(BridgeIrGenerationExtension(logger))
+        // Standard K2 registration for IrGenerationExtension
+        IrGenerationExtension.registerExtension(BridgeIrGenerationExtension(logger))
     }
 }
 

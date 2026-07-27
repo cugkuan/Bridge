@@ -1,27 +1,35 @@
-# Walkthrough - Upgrade KSP Version
+# Walkthrough - Resolve ClassCastException via Dependency Alignment
 
-I have upgraded the KSP (Kotlin Symbol Processing) version to the latest available version that is compatible with the project structure.
+I have analyzed the `ClassCastException` and found that it was caused by a combination of K1-style registration and a version leak from Gradle's internal Kotlin libraries.
+
+## The Problem
+1. **Mixed Kotlin Versions**: The `:process-gradle-plugin` module was pulling in **Kotlin 2.0.21** via `gradleApi()`, while the rest of the project was using **Kotlin 2.4.10**.
+2. **Binary Incompatibility**: In Kotlin 2.4.x, the internal compiler APIs (like `IrGenerationExtension.Companion`) changed their inheritance structure, making them incompatible with code that expects the 2.0.x structure (the `ClassCastException`).
+3. **Improper Fix**: The previous "anonymous object" was a K1-era workaround that is not suitable for a K2 `CompilerPluginRegistrar`.
 
 ## Changes
 
-### [libs.versions.toml](file:///Users/kuan/Code/Bridge/gradle/libs.versions.toml)
+### 1. [process-gradle-plugin/build.gradle.kts](file:///Users/kuan/Code/Bridge/process-gradle-plugin/build.gradle.kts)
+Added dependency constraints to force `kotlin-stdlib` and `kotlin-reflect` to version **2.4.10**, preventing `gradleApi()` from leaking older versions into the plugin's classpath.
 
-Updated `symbolProcessingApi` from `2.3.9` to `2.3.10`.
+### 2. [BridgePluginRegistrar.kt](file:///Users/kuan/Code/Bridge/process-kcp/src/main/kotlin/top/brightk/bridge/kcp/BridgePluginRegistrar.kt)
+- **Standardized K2 API**: Switched to the modern `IrGenerationExtension.registerExtension(BridgeIrGenerationExtension(logger))` registration method.
+- **Removed Hack**: Deleted the `ProjectExtensionDescriptor` anonymous object.
+- **Log Message**: Updated startup log to version **0.2.5**.
 
-> [!NOTE]
-> Although the project uses Kotlin `2.4.10`, a matching KSP version `2.4.10-x.y.z` is not yet available in the public Maven repositories. I have upgraded to `2.3.10`, which is the latest stable release available.
-
-```diff
--symbolProcessingApi = "2.3.9"
-+symbolProcessingApi = "2.3.10"
-```
+### 3. [process-kcp/build.gradle.kts](file:///Users/kuan/Code/Bridge/process-kcp/build.gradle.kts)
+Bumped version to **0.2.5**.
 
 ## Verification Results
+- **Static Analysis**: `analyze_file` confirms zero errors in the updated code.
+- **Alignment**: The classpath of the plugin is now better aligned with the 2.4.10 compiler used to build it.
 
-### Automated Tests
-- Ran `./gradlew :process:compileKotlin`.
-- The configuration phase confirmed that KSP `2.3.10` was successfully resolved (unlike `2.4.10` which failed immediately).
-- Further compilation was blocked by an unrelated environment issue in the `:androidApp` module (`AndroidLocationsBuildService` creation failure), which appears to be a local Gradle/Android Studio environment setup issue.
+## Critical Action Required
 
-## Summary
-The KSP version has been bumped to `2.3.10`. Once a matching `2.4.10` version of KSP is released, it can be updated here as well.
+> [!IMPORTANT]
+> To ensure the changes take effect and clear the old broken JARs from your environment, please run:
+> 1. `./gradlew clean`
+> 2. `./gradlew --stop`
+> 3. Perform your test build (e.g., iOS compilation).
+
+If you see `BridgeKcp Registrar version 0.2.5 starting...` in the logs, you are running the correct aligned version.
